@@ -1,33 +1,11 @@
 import Link from "next/link";
 import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import EngineeringMap from "./EngineeringMap";
 
 function tone(capacity: number) {
   if (capacity >= 90) return "critical";
   if (capacity >= 75) return "warning";
   return "safe";
-}
-
-function toneColor(capacity: number) {
-  if (capacity >= 90) return "#b42318";
-  if (capacity >= 75) return "#b88217";
-  return "#2f6b52";
-}
-
-function scalePoint(
-  lat: number,
-  lng: number,
-  bounds: { minLat: number; maxLat: number; minLng: number; maxLng: number },
-) {
-  const x = 52 + ((lng - bounds.minLng) / Math.max(bounds.maxLng - bounds.minLng, 0.001)) * 228;
-  const y = 176 - ((lat - bounds.minLat) / Math.max(bounds.maxLat - bounds.minLat, 0.001)) * 122;
-  return { x, y };
-}
-
-function axisTicks(min: number, max: number, count: number) {
-  return Array.from({ length: count }, (_, index) => {
-    const ratio = index / Math.max(count - 1, 1);
-    return min + (max - min) * ratio;
-  });
 }
 
 export default async function EngineeringPage() {
@@ -90,74 +68,31 @@ export default async function EngineeringPage() {
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
-            <h2>Coordinate plot</h2>
-            <span className="panelMeta">Kitchener-Waterloo extent</span>
+            <h2>Basemap</h2>
+            <span className="panelMeta">MapLibre / real coordinates</span>
           </div>
-          <svg viewBox="0 0 320 220" className="chartSvg" aria-label="Engineering geospatial plot">
-            <rect x="36" y="20" width="252" height="162" fill="#fafafa" stroke="#d7d7d2" />
-            {axisTicks(bounds.minLng, bounds.maxLng, 5).map((tick, index) => {
-              const x = 52 + (index / 4) * 228;
-              return (
-                <g key={`lng-${tick}`}>
-                  <line x1={x} y1={20} x2={x} y2={182} className="gridLine" />
-                  <text x={x} y={198} textAnchor="middle" className="axisText">
-                    {tick.toFixed(3)}
-                  </text>
-                </g>
-              );
-            })}
-            {axisTicks(bounds.minLat, bounds.maxLat, 4).map((tick, index) => {
-              const y = 182 - (index / 3) * 162;
-              return (
-                <g key={`lat-${tick}`}>
-                  <line x1={36} y1={y} x2={288} y2={y} className="gridLine" />
-                  <text x={30} y={y + 4} textAnchor="end" className="axisText">
-                    {tick.toFixed(3)}
-                  </text>
-                </g>
-              );
-            })}
-            {zones.map((zone) => {
-              const point = scalePoint(Number(zone.centroid_lat ?? 0), Number(zone.centroid_lng ?? 0), bounds);
-              const capacity = Number(zone.capacity_pct ?? 0);
-              return (
-                <g key={String(zone.zone_id)}>
-                  <circle
-                    cx={point.x}
-                    cy={point.y}
-                    r={14 + (capacity / 100) * 16}
-                    fill={toneColor(capacity)}
-                    fillOpacity="0.12"
-                    stroke={toneColor(capacity)}
-                    strokeWidth="1.8"
-                  />
-                  <text x={point.x} y={point.y + 3} textAnchor="middle" className="svgLabel">
-                    {String(zone.zone_id).slice(-2)}
-                  </text>
-                </g>
-              );
-            })}
-            {permits.map((permit) => {
-              const point = scalePoint(Number(permit.lat ?? 0), Number(permit.lng ?? 0), bounds);
-              return (
-                <circle
-                  key={String(permit.permit_id)}
-                  cx={point.x}
-                  cy={point.y}
-                  r={2.4 + Number(permit.units ?? 0) / 20}
-                  fill="#1d4ed8"
-                />
-              );
-            })}
-            <text x="281" y="34" className="axisText">N</text>
-            <line x1="281" y1="42" x2="281" y2="58" stroke="#111111" strokeWidth="1.4" />
-          </svg>
+          <EngineeringMap
+            zones={zones.map((zone) => ({
+              zone_id: String(zone.zone_id),
+              zone_name: String(zone.zone_name),
+              capacity_pct: Number(zone.capacity_pct ?? 0),
+              centroid_lat: Number(zone.centroid_lat ?? 0),
+              centroid_lng: Number(zone.centroid_lng ?? 0),
+            }))}
+            permits={permits.map((permit) => ({
+              permit_id: String(permit.permit_id),
+              units: Number(permit.units ?? 0),
+              lat: Number(permit.lat ?? 0),
+              lng: Number(permit.lng ?? 0),
+            }))}
+          />
           <div className="legendRow">
             <span><i className="legendSwatch safe" /> under 75%</span>
             <span><i className="legendSwatch warning" /> 75 to 89%</span>
             <span><i className="legendSwatch critical" /> 90%+</span>
             <span><i className="legendDot" /> permit units</span>
           </div>
+          <p className="annotation">Bubble area = capacity utilization. Blue dots = active permits.</p>
         </article>
 
         <article className="card">
