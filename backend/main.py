@@ -25,6 +25,8 @@ DATASET_FILES = [
     "plan_permits_2024.json",
     "health_cases.json",
     "transit_gtfs_stops.json",
+    "social_services_demographics.json",
+    "climate_risk_overlays.json",
 ]
 
 

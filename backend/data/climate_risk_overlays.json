@@ -1,0 +1,51 @@
+{
+  "dataset_id": "climate-risk-overlays",
+  "name": "Climate Risk Overlays",
+  "owner_dept": "Climate and Environment",
+  "access_tier": "open",
+  "spatial_key": "zone_id",
+  "last_updated": "2026-03-22T09:00:00Z",
+  "quality_score": 84,
+  "fields": [
+    "overlay_id",
+    "zone_id",
+    "ward",
+    "flood_risk",
+    "heat_risk",
+    "air_quality_risk",
+    "priority_score",
+    "recommended_action"
+  ],
+  "records": [
+    {
+      "overlay_id": "CLIMATE-001",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "flood_risk": 73,
+      "heat_risk": 64,
+      "air_quality_risk": 58,
+      "priority_score": 68,
+      "recommended_action": "Upgrade stormwater capacity near dense infill corridors."
+    },
+    {
+      "overlay_id": "CLIMATE-002",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "flood_risk": 41,
+      "heat_risk": 56,
+      "air_quality_risk": 49,
+      "priority_score": 49,
+      "recommended_action": "Add urban tree canopy and cooling infrastructure."
+    },
+    {
+      "overlay_id": "CLIMATE-003",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "flood_risk": 62,
+      "heat_risk": 71,
+      "air_quality_risk": 67,
+      "priority_score": 67,
+      "recommended_action": "Prioritize mixed mitigation around major transit corridors."
+    }
+  ]
+}
