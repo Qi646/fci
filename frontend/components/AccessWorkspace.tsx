@@ -5,7 +5,6 @@ import {
   accessProfiles,
   AccessConfigDataset,
   AccessConfigResponse,
-  API_BASE,
   sendJson,
 } from "../lib/api";
 
@@ -44,7 +43,7 @@ export default function AccessWorkspace() {
   useEffect(() => {
     async function loadConfig() {
       try {
-        const result = await fetch(`${API_BASE}/access-config`, {
+        const result = await fetch("/api/access-config", {
           headers: {
             Authorization: `Bearer ${accessProfiles.admin.userId}`,
             "X-User-Id": accessProfiles.admin.userId,
@@ -53,7 +52,19 @@ export default function AccessWorkspace() {
           cache: "no-store",
         });
         if (!result.ok) {
-          setMessage("Could not load access settings from the backend.");
+          if (result.status === 404) {
+            setMessage(
+              "The backend is running, but it does not expose /access-config yet. Restart the API so it picks up the new access-control endpoints.",
+            );
+            return;
+          }
+          if (result.status === 401 || result.status === 403) {
+            setMessage(
+              "The backend rejected the access-settings request. Check that the current demo admin identity is allowed to manage access settings.",
+            );
+            return;
+          }
+          setMessage(`Could not load access settings from the backend. HTTP ${result.status}.`);
           return;
         }
         const payload = (await result.json()) as AccessConfigResponse;
@@ -64,7 +75,9 @@ export default function AccessWorkspace() {
           ),
         );
       } catch {
-        setMessage("Could not load access settings from the backend.");
+        setMessage(
+          "Could not reach the access service. Check that both the frontend and backend are running.",
+        );
       }
     }
 
@@ -119,14 +132,16 @@ export default function AccessWorkspace() {
     setSavingId(datasetId);
     setMessage("");
     const payload = await sendJson<{ dataset: AccessConfigDataset }>(
-      `/access-config/${datasetId}`,
+      `/api/access-config/${datasetId}`,
       accessProfiles.admin,
       "PUT",
       draft,
     );
     setSavingId(null);
     if (!payload) {
-      setMessage("Save failed. The backend rejected the change or could not be reached.");
+      setMessage(
+        "Save failed. The backend either rejected the change or is still running an older version without the access-config endpoints.",
+      );
       return;
     }
 
