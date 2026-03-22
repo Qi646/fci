@@ -1,6 +1,11 @@
 import Link from "next/link";
-import DataControls from "../../components/DataControls";
-import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
+import GovernedViewPanel from "../../components/GovernedViewPanel";
+import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
+import { resolveViewer } from "../../lib/viewer";
+
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 function buildSeries(records: Array<Record<string, unknown>>) {
   const monthly = new Map<string, { units: number; permits: number }>();
@@ -25,10 +30,13 @@ function linePoints(values: number[], width: number, height: number) {
     .join(" ");
 }
 
-export default async function PlanningPage() {
-  const permits = asRecords(
-    await fetchJson<QueryResult>("/datasets/plan-permits-2024/query", accessProfiles.planning),
-  );
+export default async function PlanningPage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "planning");
+  const [permitsResult, catalogResult] = await Promise.all([
+    fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context),
+    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  ]);
+  const permits = asRecords(permitsResult.ok ? permitsResult.data : null);
   const series = buildSeries(permits);
   const unitValues = series.map(([, value]) => value.units);
   const permitValues = series.map(([, value]) => value.permits);
@@ -79,16 +87,26 @@ export default async function PlanningPage() {
         </article>
       </section>
 
-      <DataControls
+      <GovernedViewPanel
+        viewer={{
+          profileKey: viewer.profileKey,
+          label: viewer.profile.label,
+          department: viewer.profile.department,
+          role: viewer.profile.role,
+          purpose: viewer.purpose,
+          approvedPurposes: viewer.profile.approvedPurposes ?? [],
+        }}
+        title="Planning workspace"
         summary="This page starts with planning’s own permit pipeline because that is the default dataset a planner expects to review here."
-        datasets={[
-          {
-            name: "Planning Residential Permits",
-            defaultState: "On",
-            detail: "Shown directly for housing forecasting and permitting analysis. Owner-department users get the normal internal view.",
-          },
-        ]}
+        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        defaultIncludedIds={["plan-permits-2024"]}
       />
+
+      {!permitsResult.ok ? (
+        <div className="warningBanner">
+          {permitsResult.error?.reason ?? permitsResult.error?.error ?? "The backend denied this dataset."}
+        </div>
+      ) : null}
 
       <section className="twoUp">
         <article className="card">

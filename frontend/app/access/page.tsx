@@ -1,7 +1,14 @@
 import Link from "next/link";
 import AccessWorkspace from "../../components/AccessWorkspace";
+import { resolveViewer } from "../../lib/viewer";
 
-export default function AccessPage() {
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function AccessPage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "admin");
+
   return (
     <main className="sectionShell">
       <header className="sectionHeader">
@@ -19,7 +26,7 @@ export default function AccessPage() {
         </Link>
       </header>
 
-      <AccessWorkspace />
+      <AccessWorkspace context={viewer.context} />
     </main>
   );
 }

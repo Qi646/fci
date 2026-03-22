@@ -1,7 +1,17 @@
 import Link from "next/link";
-import DataControls from "../../components/DataControls";
-import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
+import GovernedViewPanel from "../../components/GovernedViewPanel";
+import {
+  asRecords,
+  CatalogResponse,
+  fetchApi,
+  QueryResult,
+} from "../../lib/api";
+import { resolveViewer } from "../../lib/viewer";
 import EngineeringMap from "./EngineeringMap";
+
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 function tone(capacity: number) {
   if (capacity >= 90) return "critical";
@@ -9,13 +19,19 @@ function tone(capacity: number) {
   return "safe";
 }
 
-export default async function EngineeringPage() {
-  const zones = asRecords(
-    await fetchJson<QueryResult>("/datasets/eng-pressure-zones/query", accessProfiles.engineering),
-  );
-  const permits = asRecords(
-    await fetchJson<QueryResult>("/datasets/plan-permits-2024/query", accessProfiles.engineering),
-  );
+export default async function EngineeringPage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "engineering");
+  const [zonesResult, permitsResult, catalogResult] = await Promise.all([
+    fetchApi<QueryResult>("/datasets/eng-pressure-zones/query", viewer.context),
+    fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context),
+    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  ]);
+
+  const zones = asRecords(zonesResult.ok ? zonesResult.data : null);
+  const permits = asRecords(permitsResult.ok ? permitsResult.data : null);
+  const accessWarnings = [zonesResult, permitsResult]
+    .filter((result) => !result.ok)
+    .map((result) => result.error?.reason ?? result.error?.error ?? "The backend denied this dataset.");
 
   const hotspots = zones
     .map((zone) => ({
@@ -36,10 +52,10 @@ export default async function EngineeringPage() {
     ...permits.map((permit) => Number(permit.lng ?? 0)),
   ];
   const bounds = {
-    minLat: Math.min(...lats),
-    maxLat: Math.max(...lats),
-    minLng: Math.min(...lngs),
-    maxLng: Math.max(...lngs),
+    minLat: Math.min(...(lats.length ? lats : [0])),
+    maxLat: Math.max(...(lats.length ? lats : [0])),
+    minLng: Math.min(...(lngs.length ? lngs : [0])),
+    maxLng: Math.max(...(lngs.length ? lngs : [0])),
   };
   const criticalZones = hotspots.filter((zone) => zone.capacity >= 90);
   const permitLoadInCritical = criticalZones.reduce((sum, zone) => sum + zone.permits, 0);
@@ -76,21 +92,26 @@ export default async function EngineeringPage() {
         </article>
       </section>
 
-      <DataControls
+      <GovernedViewPanel
+        viewer={{
+          profileKey: viewer.profileKey,
+          label: viewer.profile.label,
+          department: viewer.profile.department,
+          role: viewer.profile.role,
+          purpose: viewer.purpose,
+          approvedPurposes: viewer.profile.approvedPurposes ?? [],
+        }}
+        title="Engineering workspace"
         summary="This view defaults to engineering pressure zones plus planning permits because that is the common operational question here: where new housing demand meets water-capacity constraints."
-        datasets={[
-          {
-            name: "Engineering Pressure Zones",
-            defaultState: "On",
-            detail: "Primary layer for this page. Capacity markers and zone table are based on engineering-owned data.",
-          },
-          {
-            name: "Planning Residential Permits",
-            defaultState: "On, hidden personal fields",
-            detail: "Shared in by default because permit activity is the main driver of capacity stress. Personal fields stay hidden when engineering views it.",
-          },
-        ]}
+        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        defaultIncludedIds={["eng-pressure-zones", "plan-permits-2024"]}
       />
+
+      {accessWarnings.map((warning) => (
+        <div key={warning} className="warningBanner">
+          {warning}
+        </div>
+      ))}
 
       <section className="twoUp">
         <article className="card">

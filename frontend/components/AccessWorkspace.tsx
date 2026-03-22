@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  accessProfiles,
+  AccessContext,
   AccessConfigDataset,
   AccessConfigResponse,
   sendJson,
 } from "../lib/api";
+import { departmentLabel } from "../lib/viewer";
 
 type State = {
   sharing_policy: string;
@@ -34,7 +35,11 @@ function initialState(dataset: AccessConfigDataset): State {
   };
 }
 
-export default function AccessWorkspace() {
+type Props = {
+  context: AccessContext;
+};
+
+export default function AccessWorkspace({ context }: Props) {
   const [response, setResponse] = useState<AccessConfigResponse | null>(null);
   const [drafts, setDrafts] = useState<Record<string, State>>({});
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -45,9 +50,9 @@ export default function AccessWorkspace() {
       try {
         const result = await fetch("/api/access-config", {
           headers: {
-            Authorization: `Bearer ${accessProfiles.admin.userId}`,
-            "X-User-Id": accessProfiles.admin.userId,
-            "X-Purpose": accessProfiles.admin.purpose ?? "",
+            Authorization: `Bearer ${context.userId}`,
+            "X-User-Id": context.userId,
+            "X-Purpose": context.purpose ?? "",
           },
           cache: "no-store",
         });
@@ -60,7 +65,7 @@ export default function AccessWorkspace() {
           }
           if (result.status === 401 || result.status === 403) {
             setMessage(
-              "The backend rejected the access-settings request. Check that the current demo admin identity is allowed to manage access settings.",
+              "The backend rejected the access-settings request. The active viewer either lacks access-workspace rights or the purpose is not approved.",
             );
             return;
           }
@@ -82,7 +87,7 @@ export default function AccessWorkspace() {
     }
 
     void loadConfig();
-  }, []);
+  }, [context]);
 
   const glossary = useMemo(
     () => [
@@ -133,7 +138,7 @@ export default function AccessWorkspace() {
     setMessage("");
     const payload = await sendJson<{ dataset: AccessConfigDataset }>(
       `/api/access-config/${datasetId}`,
-      accessProfiles.admin,
+      context,
       "PUT",
       draft,
     );
@@ -188,7 +193,8 @@ export default function AccessWorkspace() {
               <h2>Dataset sharing defaults</h2>
             </div>
             <div className="accessIdentity">
-              <span className="policyBadge strong">Admin workspace</span>
+              <span className="policyBadge strong">{departmentLabel(context.department)}</span>
+              <span className="policyBadge">{departmentLabel(context.role)}</span>
               <span className="policyBadge">Backend-backed settings</span>
             </div>
           </div>

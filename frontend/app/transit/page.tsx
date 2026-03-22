@@ -1,22 +1,30 @@
 import Link from "next/link";
-import DataControls from "../../components/DataControls";
-import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
+import GovernedViewPanel from "../../components/GovernedViewPanel";
+import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
+import { resolveViewer } from "../../lib/viewer";
+
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 function scalePoint(value: number, min: number, max: number, start: number, size: number) {
   return start + ((value - min) / Math.max(max - min, 0.001)) * size;
 }
 
-export default async function TransitPage() {
-  const stops = asRecords(
-    await fetchJson<QueryResult>("/datasets/transit-stops/query", accessProfiles.publicPortal),
-  );
+export default async function TransitPage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "transit");
+  const [stopsResult, catalogResult] = await Promise.all([
+    fetchApi<QueryResult>("/datasets/transit-stops/query", viewer.context),
+    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  ]);
+  const stops = asRecords(stopsResult.ok ? stopsResult.data : null);
   const sortedByBoardings = [...stops].sort((a, b) => Number(b.weekly_boardings ?? 0) - Number(a.weekly_boardings ?? 0));
   const lats = stops.map((stop) => Number(stop.lat ?? 0));
   const lngs = stops.map((stop) => Number(stop.lng ?? 0));
-  const minLat = Math.min(...lats);
-  const maxLat = Math.max(...lats);
-  const minLng = Math.min(...lngs);
-  const maxLng = Math.max(...lngs);
+  const minLat = Math.min(...(lats.length ? lats : [0]));
+  const maxLat = Math.max(...(lats.length ? lats : [0]));
+  const minLng = Math.min(...(lngs.length ? lngs : [0]));
+  const maxLng = Math.max(...(lngs.length ? lngs : [0]));
   const totalBoardings = sortedByBoardings.reduce((sum, stop) => sum + Number(stop.weekly_boardings ?? 0), 0);
 
   return (
@@ -50,16 +58,26 @@ export default async function TransitPage() {
         </article>
       </section>
 
-      <DataControls
+      <GovernedViewPanel
+        viewer={{
+          profileKey: viewer.profileKey,
+          label: viewer.profile.label,
+          department: viewer.profile.department,
+          role: viewer.profile.role,
+          purpose: viewer.purpose,
+          approvedPurposes: viewer.profile.approvedPurposes ?? [],
+        }}
+        title="Transit workspace"
         summary="This view defaults to the open transit network dataset, which is suitable for broad public or cross-department use without additional sharing steps."
-        datasets={[
-          {
-            name: "Transit Stops and Ridership",
-            defaultState: "On",
-            detail: "Open operational summary data. Safe for public dashboards and general planning use.",
-          },
-        ]}
+        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        defaultIncludedIds={["transit-stops"]}
       />
+
+      {!stopsResult.ok ? (
+        <div className="warningBanner">
+          {stopsResult.error?.reason ?? stopsResult.error?.error ?? "The backend denied this dataset."}
+        </div>
+      ) : null}
 
       <section className="twoUp">
         <article className="card">

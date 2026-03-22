@@ -1,14 +1,19 @@
 import Link from "next/link";
-import DataControls from "../../components/DataControls";
-import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
+import GovernedViewPanel from "../../components/GovernedViewPanel";
+import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
+import { resolveViewer } from "../../lib/viewer";
 
-export default async function SocialServicesPage() {
-  const records = asRecords(
-    await fetchJson<QueryResult>(
-      "/datasets/social-services-demographics/query",
-      accessProfiles.socialServices,
-    ),
-  );
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function SocialServicesPage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "socialServices");
+  const [recordsResult, catalogResult] = await Promise.all([
+    fetchApi<QueryResult>("/datasets/social-services-demographics/query", viewer.context),
+    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  ]);
+  const records = asRecords(recordsResult.ok ? recordsResult.data : null);
   const sortedRecords = [...records].sort((a, b) => Number(b.population ?? 0) - Number(a.population ?? 0));
   const maxPopulation = Math.max(...sortedRecords.map((record) => Number(record.population ?? 0)), 1);
   const totalPopulation = sortedRecords.reduce((sum, record) => sum + Number(record.population ?? 0), 0);
@@ -46,16 +51,26 @@ export default async function SocialServicesPage() {
         </article>
       </section>
 
-      <DataControls
+      <GovernedViewPanel
+        viewer={{
+          profileKey: viewer.profileKey,
+          label: viewer.profile.label,
+          department: viewer.profile.department,
+          role: viewer.profile.role,
+          purpose: viewer.purpose,
+          approvedPurposes: viewer.profile.approvedPurposes ?? [],
+        }}
+        title="Social services workspace"
         summary="This page defaults to the confidential social-services dataset because the user task here is internal service demand planning."
-        datasets={[
-          {
-            name: "Social Services Demographics",
-            defaultState: "On, approved departments only",
-            detail: "Confidential data for approved service programs. This should not appear in public-facing views.",
-          },
-        ]}
+        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        defaultIncludedIds={["social-services-demographics"]}
       />
+
+      {!recordsResult.ok ? (
+        <div className="warningBanner">
+          {recordsResult.error?.reason ?? recordsResult.error?.error ?? "The backend denied this dataset."}
+        </div>
+      ) : null}
 
       <section className="twoUp">
         <article className="card">

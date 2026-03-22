@@ -1,6 +1,7 @@
 import Link from "next/link";
 import DataControls from "../components/DataControls";
 import { accessProfiles, API_BASE, fetchJson } from "../lib/api";
+import { resolveViewer } from "../lib/viewer";
 
 const cards = [
   {
@@ -59,9 +60,17 @@ const cards = [
   },
 ];
 
-export default async function Home() {
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function Home({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "publicPortal");
   const health = await fetchJson<{ status: string }>("/health", accessProfiles.publicPortal);
   const apiReachable = Boolean(health?.status === "ok");
+  const activeParams = new URLSearchParams();
+  activeParams.set("profile", viewer.profileKey);
+  activeParams.set("purpose", viewer.purpose);
 
   return (
     <main className="launcherShell">
@@ -106,7 +115,7 @@ export default async function Home() {
 
       <section className="launcherGrid">
         {cards.map((card) => (
-          <Link key={card.href} href={card.href} className="launcherCard">
+          <Link key={card.href} href={`${card.href}?${activeParams.toString()}`} className="launcherCard">
             <div className="launcherCardMain">
               <div className="launcherText">
                 <p className="launcherEyebrow">{card.eyebrow}</p>

@@ -1,11 +1,19 @@
 import Link from "next/link";
-import DataControls from "../../components/DataControls";
-import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
+import GovernedViewPanel from "../../components/GovernedViewPanel";
+import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
+import { resolveViewer } from "../../lib/viewer";
 
-export default async function ClimatePage() {
-  const overlays = asRecords(
-    await fetchJson<QueryResult>("/datasets/climate-risk-overlays/query", accessProfiles.publicPortal),
-  );
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function ClimatePage({ searchParams }: PageProps) {
+  const viewer = await resolveViewer(searchParams, "climate");
+  const [overlaysResult, catalogResult] = await Promise.all([
+    fetchApi<QueryResult>("/datasets/climate-risk-overlays/query", viewer.context),
+    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  ]);
+  const overlays = asRecords(overlaysResult.ok ? overlaysResult.data : null);
   const sortedOverlays = [...overlays].sort((a, b) => Number(b.priority_score ?? 0) - Number(a.priority_score ?? 0));
   const avgPriority = Math.round(
     sortedOverlays.reduce((sum, overlay) => sum + Number(overlay.priority_score ?? 0), 0) /
@@ -43,16 +51,26 @@ export default async function ClimatePage() {
         </article>
       </section>
 
-      <DataControls
+      <GovernedViewPanel
+        viewer={{
+          profileKey: viewer.profileKey,
+          label: viewer.profile.label,
+          department: viewer.profile.department,
+          role: viewer.profile.role,
+          purpose: viewer.purpose,
+          approvedPurposes: viewer.profile.approvedPurposes ?? [],
+        }}
+        title="Climate workspace"
         summary="This view defaults to open climate overlays so it can support both public transparency and broad internal planning without extra setup."
-        datasets={[
-          {
-            name: "Climate Risk Overlays",
-            defaultState: "On",
-            detail: "Open environmental risk information suitable for public and cross-department use.",
-          },
-        ]}
+        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        defaultIncludedIds={["climate-risk-overlays"]}
       />
+
+      {!overlaysResult.ok ? (
+        <div className="warningBanner">
+          {overlaysResult.error?.reason ?? overlaysResult.error?.error ?? "The backend denied this dataset."}
+        </div>
+      ) : null}
 
       <section className="twoUp">
         <article className="card">
