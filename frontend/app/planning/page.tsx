@@ -28,11 +28,21 @@ export default async function PlanningPage() {
   );
   const series = buildSeries(permits);
   const monthlyUnits = series.map(([, value]) => value);
+  const monthlyPermits = series.map(([month]) =>
+    permits.filter((record) => String(record.issued_date ?? "").startsWith(month)).length,
+  );
   const infillShare =
     permits.filter((record) => record.permit_type === "infill").length /
     Math.max(permits.length, 1);
 
-  const points = polyline(monthlyUnits, 260, 90)
+  const unitPoints = polyline(monthlyUnits, 260, 90)
+    .split(" ")
+    .map((point) => {
+      const [x, y] = point.split(",");
+      return `${Number(x) + 20},${Number(y) + 20}`;
+    })
+    .join(" ");
+  const permitPoints = polyline(monthlyPermits, 260, 90)
     .split(" ")
     .map((point) => {
       const [x, y] = point.split(",");
@@ -62,12 +72,23 @@ export default async function PlanningPage() {
           <svg viewBox="0 0 320 140" className="chartSvg" aria-label="Permit trend line">
             <path d="M20 120 H300" className="axisLine" />
             <path d="M20 20 V120" className="axisLine" />
-            <polyline fill="none" stroke="#2768c9" strokeWidth="4" points={points} />
+            <polyline fill="none" stroke="#2768c9" strokeWidth="4" points={unitPoints} />
+            <polyline
+              fill="none"
+              stroke="#5b8f27"
+              strokeDasharray="6 5"
+              strokeWidth="3"
+              points={permitPoints}
+            />
           </svg>
           <div className="timelineLabels">
             {series.map(([month]) => (
               <span key={month}>{month.slice(5)}</span>
             ))}
+          </div>
+          <div className="metricRow">
+            <div className="metricPill safe">Blue: units approved</div>
+            <div className="metricPill warning">Dashed: permits issued</div>
           </div>
         </article>
 

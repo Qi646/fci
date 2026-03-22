@@ -5,6 +5,9 @@ export default async function ClimatePage() {
   const overlays = asRecords(
     await fetchJson<QueryResult>("/datasets/climate-risk-overlays/query", "public"),
   );
+  const sortedOverlays = [...overlays].sort(
+    (a, b) => Number(b.priority_score ?? 0) - Number(a.priority_score ?? 0),
+  );
 
   return (
     <main className="sectionShell">
@@ -24,18 +27,33 @@ export default async function ClimatePage() {
 
       <section className="twoUp">
         <article className="card">
-          <h2>Overlay sketch</h2>
-          <div className="overlayFrame">
-            <div className="overlayCircle flood">Flood</div>
-            <div className="overlayCircle risk">Risk</div>
-            <div className="overlayCircle heat">Heat</div>
-          </div>
+          <h2>Risk overlap</h2>
+          <svg viewBox="0 0 320 220" className="chartSvg" aria-label="Climate risk overlay">
+            <rect x="0" y="0" width="320" height="220" rx="16" fill="#dfeaf6" />
+            {sortedOverlays.map((overlay, index) => {
+              const flood = Number(overlay.flood_risk ?? 0);
+              const heat = Number(overlay.heat_risk ?? 0);
+              const air = Number(overlay.air_quality_risk ?? 0);
+              const x = 78 + index * 82;
+              const y = 110 - index * 6;
+              return (
+                <g key={String(overlay.overlay_id)}>
+                  <circle cx={x - 18} cy={y} r={flood / 2.8} fill="rgba(94, 152, 230, 0.34)" />
+                  <circle cx={x + 24} cy={y - 6} r={heat / 3} fill="rgba(242, 190, 88, 0.34)" />
+                  <circle cx={x + 4} cy={y + 18} r={air / 3.2} fill="rgba(231, 116, 116, 0.38)" />
+                  <text x={x + 4} y={y + 4} textAnchor="middle" className="svgLabel">
+                    {String(overlay.ward).replace("Ward ", "W")}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
         </article>
 
         <article className="card">
           <h2>Priority areas</h2>
           <div className="stackList">
-            {overlays.map((overlay) => (
+            {sortedOverlays.map((overlay) => (
               <div key={String(overlay.overlay_id)} className="stackRow">
                 <div>
                   <strong>{String(overlay.ward)}</strong>

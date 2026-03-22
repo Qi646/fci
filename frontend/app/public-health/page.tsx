@@ -5,6 +5,9 @@ export default async function PublicHealthPage() {
   const cases = asRecords(
     await fetchJson<QueryResult>("/datasets/health-cases/query", "health_steward"),
   );
+  const sortedCases = [...cases].sort(
+    (a, b) => Number(b.rate_per_1000 ?? 0) - Number(a.rate_per_1000 ?? 0),
+  );
 
   return (
     <main className="sectionShell">
@@ -26,13 +29,14 @@ export default async function PublicHealthPage() {
         <article className="card">
           <h2>Case intensity grid</h2>
           <div className="heatGrid">
-            {cases.map((record) => {
+            {sortedCases.map((record) => {
               const level = Number(record.rate_per_1000 ?? 0);
               const tone =
                 level >= 7 ? "heatHigh" : level >= 4 ? "heatMid" : "heatLow";
               return (
                 <div key={String(record.record_id)} className={`heatCell ${tone}`}>
-                  <span>{String(record.ward).replace("Ward ", "W")}</span>
+                  <strong>{String(record.ward).replace("Ward ", "W")}</strong>
+                  <span>{level.toFixed(1)}</span>
                 </div>
               );
             })}
@@ -42,7 +46,7 @@ export default async function PublicHealthPage() {
         <article className="card">
           <h2>Alerts</h2>
           <div className="stackList">
-            {cases.map((record) => (
+            {sortedCases.map((record) => (
               <div key={String(record.record_id)} className="stackRow">
                 <div>
                   <strong>{String(record.ward)}</strong>

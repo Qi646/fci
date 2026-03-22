@@ -5,7 +5,10 @@ export default async function SocialServicesPage() {
   const records = asRecords(
     await fetchJson<QueryResult>("/datasets/social-services-demographics/query"),
   );
-  const maxPopulation = Math.max(...records.map((record) => Number(record.population ?? 0)), 1);
+  const sortedRecords = [...records].sort(
+    (a, b) => Number(b.population ?? 0) - Number(a.population ?? 0),
+  );
+  const maxPopulation = Math.max(...sortedRecords.map((record) => Number(record.population ?? 0)), 1);
 
   return (
     <main className="sectionShell">
@@ -27,7 +30,7 @@ export default async function SocialServicesPage() {
         <article className="card">
           <h2>Cohort view</h2>
           <div className="barChart">
-            {records.map((record) => {
+            {sortedRecords.map((record) => {
               const population = Number(record.population ?? 0);
               return (
                 <div key={`${record.ward}-${record.cohort}`} className="barGroup">
@@ -45,7 +48,7 @@ export default async function SocialServicesPage() {
         <article className="card">
           <h2>Need summary</h2>
           <div className="stackList">
-            {records.map((record) => (
+            {sortedRecords.map((record) => (
               <div key={`${record.ward}-${record.cohort}`} className="stackRow">
                 <div>
                   <strong>{String(record.cohort).replaceAll("_", " ")}</strong>

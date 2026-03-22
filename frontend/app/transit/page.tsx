@@ -1,22 +1,30 @@
 import Link from "next/link";
 import { asRecords, fetchJson, QueryResult } from "../../lib/api";
 
-const edges = [
-  ["KW-STOP-001", "KW-STOP-002"],
-  ["KW-STOP-001", "KW-STOP-003"],
-  ["KW-STOP-003", "KW-STOP-002"],
-];
-
-const positions: Record<string, { x: number; y: number; label: string }> = {
-  "KW-STOP-001": { x: 60, y: 100, label: "A" },
-  "KW-STOP-002": { x: 250, y: 100, label: "D" },
-  "KW-STOP-003": { x: 150, y: 130, label: "C" },
-};
-
 export default async function TransitPage() {
   const stops = asRecords(
     await fetchJson<QueryResult>("/datasets/transit-stops/query", "public"),
   );
+  const orderedStops = [...stops].sort(
+    (a, b) => Number(a.lng ?? 0) - Number(b.lng ?? 0),
+  );
+  type PositionedStop = Record<string, unknown> & { x: number; y: number };
+  const lats = orderedStops.map((stop) => Number(stop.lat ?? 0));
+  const lngs = orderedStops.map((stop) => Number(stop.lng ?? 0));
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  const positionedStops: PositionedStop[] = orderedStops.map((stop) => {
+    const x = 44 + ((Number(stop.lng ?? 0) - minLng) / Math.max(maxLng - minLng, 0.001)) * 232;
+    const y = 144 - ((Number(stop.lat ?? 0) - minLat) / Math.max(maxLat - minLat, 0.001)) * 86;
+    return { ...stop, x, y };
+  });
+  const edges = positionedStops.slice(1).map((stop, index) => {
+    const previous = positionedStops[index];
+    const weight = (Number(stop.weekly_boardings ?? 0) + Number(previous.weekly_boardings ?? 0)) / 2200;
+    return { from: previous, to: stop, weight };
+  });
 
   return (
     <main className="sectionShell">
@@ -38,22 +46,29 @@ export default async function TransitPage() {
         <article className="card">
           <h2>Network view</h2>
           <svg viewBox="0 0 320 180" className="chartSvg" aria-label="Transit network">
-            {edges.map(([from, to]) => (
+            {edges.map((edge) => (
               <line
-                key={`${from}-${to}`}
-                x1={positions[from].x}
-                y1={positions[from].y}
-                x2={positions[to].x}
-                y2={positions[to].y}
+                key={`${String(edge.from.stop_id)}-${String(edge.to.stop_id)}`}
+                x1={edge.from.x}
+                y1={edge.from.y}
+                x2={edge.to.x}
+                y2={edge.to.y}
                 stroke="#5f90d8"
-                strokeWidth="4"
+                strokeWidth={Math.max(2, edge.weight)}
               />
             ))}
-            {Object.entries(positions).map(([id, point]) => (
-              <g key={id}>
-                <circle cx={point.x} cy={point.y} r="16" fill="#e8f0ff" stroke="#2e6ec7" strokeWidth="2" />
-                <text x={point.x} y={point.y + 4} textAnchor="middle" fontSize="12" fill="#2158a6">
-                  {point.label}
+            {positionedStops.map((stop, index) => (
+              <g key={String(stop.stop_id)}>
+                <circle
+                  cx={stop.x}
+                  cy={stop.y}
+                  r={10 + Number(stop.weekly_boardings ?? 0) / 800}
+                  fill="#e8f0ff"
+                  stroke="#2e6ec7"
+                  strokeWidth="2"
+                />
+                <text x={stop.x} y={stop.y + 4} textAnchor="middle" fontSize="12" fill="#2158a6">
+                  {String.fromCharCode(65 + index)}
                 </text>
               </g>
             ))}
