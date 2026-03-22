@@ -1,0 +1,59 @@
+{
+  "dataset_id": "transit-stops",
+  "name": "Transit Stops and Ridership",
+  "owner_dept": "Transit",
+  "access_tier": "open",
+  "spatial_key": "zone_id",
+  "last_updated": "2026-03-22T09:00:00Z",
+  "quality_score": 94,
+  "fields": [
+    "stop_id",
+    "stop_name",
+    "civic_address",
+    "parcel_id",
+    "lat",
+    "lng",
+    "routes",
+    "weekly_boardings",
+    "ward",
+    "zone_id"
+  ],
+  "records": [
+    {
+      "stop_id": "KW-STOP-001",
+      "stop_name": "King and Victoria",
+      "civic_address": "1 King St W, Kitchener",
+      "parcel_id": "KIT-STOP-001",
+      "lat": 43.451,
+      "lng": -80.493,
+      "routes": ["iXpress 200", "Route 7"],
+      "weekly_boardings": 4820,
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002"
+    },
+    {
+      "stop_id": "KW-STOP-002",
+      "stop_name": "Waterloo Town Square",
+      "civic_address": "75 King St S, Waterloo",
+      "parcel_id": "WAT-STOP-002",
+      "lat": 43.465,
+      "lng": -80.522,
+      "routes": ["iXpress 200", "Route 8"],
+      "weekly_boardings": 3910,
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004"
+    },
+    {
+      "stop_id": "KW-STOP-003",
+      "stop_name": "Ottawa and Strasburg",
+      "civic_address": "800 Ottawa St S, Kitchener",
+      "parcel_id": "KIT-STOP-003",
+      "lat": 43.419,
+      "lng": -80.479,
+      "routes": ["Route 12"],
+      "weekly_boardings": 1480,
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005"
+    }
+  ]
+}

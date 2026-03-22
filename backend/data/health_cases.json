@@ -1,0 +1,51 @@
+{
+  "dataset_id": "health-cases",
+  "name": "Public Health Weekly Cases",
+  "owner_dept": "Public Health",
+  "access_tier": "restricted",
+  "spatial_key": "zone_id",
+  "last_updated": "2026-03-22T09:00:00Z",
+  "quality_score": 86,
+  "fields": [
+    "record_id",
+    "zone_id",
+    "ward",
+    "week_start",
+    "case_count",
+    "case_type",
+    "rate_per_1000",
+    "alert"
+  ],
+  "records": [
+    {
+      "record_id": "HEALTH-2024-W44-ZONE002",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-28",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-ZONE004",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-28",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 7.1,
+      "alert": true
+    },
+    {
+      "record_id": "HEALTH-2024-W45-ZONE003",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-11-04",
+      "case_count": 11,
+      "case_type": "gastro",
+      "rate_per_1000": 2.4,
+      "alert": false
+    }
+  ]
+}

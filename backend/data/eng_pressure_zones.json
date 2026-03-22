@@ -1,0 +1,77 @@
+{
+  "dataset_id": "eng-pressure-zones",
+  "name": "Engineering Pressure Zones",
+  "owner_dept": "Engineering",
+  "access_tier": "internal",
+  "spatial_key": "zone_id",
+  "last_updated": "2026-03-22T09:00:00Z",
+  "quality_score": 92,
+  "fields": [
+    "zone_id",
+    "zone_name",
+    "wards",
+    "capacity_pct",
+    "max_capacity_units",
+    "current_load_units",
+    "status",
+    "centroid_lat",
+    "centroid_lng"
+  ],
+  "records": [
+    {
+      "zone_id": "ENG-ZONE-001",
+      "zone_name": "North Corridor",
+      "wards": ["Ward 1", "Ward 2"],
+      "capacity_pct": 62,
+      "max_capacity_units": 4200,
+      "current_load_units": 2604,
+      "status": "safe",
+      "centroid_lat": 43.476,
+      "centroid_lng": -80.515
+    },
+    {
+      "zone_id": "ENG-ZONE-002",
+      "zone_name": "Bridgeport",
+      "wards": ["Ward 6"],
+      "capacity_pct": 97,
+      "max_capacity_units": 1800,
+      "current_load_units": 1746,
+      "status": "critical",
+      "centroid_lat": 43.451,
+      "centroid_lng": -80.497
+    },
+    {
+      "zone_id": "ENG-ZONE-003",
+      "zone_name": "Central Grid",
+      "wards": ["Ward 4", "Ward 5"],
+      "capacity_pct": 81,
+      "max_capacity_units": 3100,
+      "current_load_units": 2511,
+      "status": "warning",
+      "centroid_lat": 43.458,
+      "centroid_lng": -80.511
+    },
+    {
+      "zone_id": "ENG-ZONE-004",
+      "zone_name": "Uptown East",
+      "wards": ["Ward 9"],
+      "capacity_pct": 93,
+      "max_capacity_units": 2200,
+      "current_load_units": 2046,
+      "status": "critical",
+      "centroid_lat": 43.465,
+      "centroid_lng": -80.484
+    },
+    {
+      "zone_id": "ENG-ZONE-005",
+      "zone_name": "South Basin",
+      "wards": ["Ward 7", "Ward 8"],
+      "capacity_pct": 55,
+      "max_capacity_units": 2800,
+      "current_load_units": 1540,
+      "status": "safe",
+      "centroid_lat": 43.436,
+      "centroid_lng": -80.508
+    }
+  ]
+}
