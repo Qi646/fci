@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -32,10 +32,17 @@ function linePoints(values: number[], width: number, height: number) {
 
 export default async function PlanningPage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "planning");
-  const [permitsResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
-  ]);
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["plan-permits-2024"],
+  );
+  const includePermits = includedIds.includes("plan-permits-2024");
+  const permitsResult = includePermits
+    ? await fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context)
+    : ({ ok: true, status: 200, data: null } as const);
   const permits = asRecords(permitsResult.ok ? permitsResult.data : null);
   const series = buildSeries(permits);
   const unitValues = series.map(([, value]) => value.units);
@@ -98,7 +105,7 @@ export default async function PlanningPage({ searchParams }: PageProps) {
         }}
         title="Planning workspace"
         summary="This page starts with planning’s own permit pipeline because that is the default dataset a planner expects to review here."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["plan-permits-2024"]}
       />
 
@@ -107,7 +114,23 @@ export default async function PlanningPage({ searchParams }: PageProps) {
           {permitsResult.error?.reason ?? permitsResult.error?.error ?? "The backend denied this dataset."}
         </div>
       ) : null}
+      {!includePermits ? (
+        <div className="warningBanner">
+          Planning permits are not included in this workspace.
+        </div>
+      ) : null}
 
+      {!includePermits ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add the planning permits dataset above to render this analysis.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -173,6 +196,7 @@ export default async function PlanningPage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }

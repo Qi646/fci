@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -9,10 +9,17 @@ type PageProps = {
 
 export default async function PublicHealthPage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "publicHealth");
-  const [recordsResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/health-cases/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
-  ]);
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["health-cases"],
+  );
+  const includeHealthCases = includedIds.includes("health-cases");
+  const recordsResult = includeHealthCases
+    ? await fetchApi<QueryResult>("/datasets/health-cases/query", viewer.context)
+    : ({ ok: true, status: 200, data: null } as const);
   const records = asRecords(recordsResult.ok ? recordsResult.data : null);
   const wards = [...new Set(records.map((record) => String(record.ward)))];
   const caseTypes = [...new Set(records.map((record) => String(record.case_type)))];
@@ -68,7 +75,7 @@ export default async function PublicHealthPage({ searchParams }: PageProps) {
         }}
         title="Public health workspace"
         summary="This page defaults to the health surveillance dataset because it is the operational source for monitoring weekly case patterns and alerts."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["health-cases"]}
       />
 
@@ -77,7 +84,23 @@ export default async function PublicHealthPage({ searchParams }: PageProps) {
           {recordsResult.error?.reason ?? recordsResult.error?.error ?? "The backend denied this dataset."}
         </div>
       ) : null}
+      {!includeHealthCases ? (
+        <div className="warningBanner">
+          Public health weekly cases are not included in this workspace.
+        </div>
+      ) : null}
 
+      {!includeHealthCases ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add the health surveillance dataset above to render this analysis.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -159,6 +182,7 @@ export default async function PublicHealthPage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }

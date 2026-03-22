@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -9,10 +9,17 @@ type PageProps = {
 
 export default async function SocialServicesPage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "socialServices");
-  const [recordsResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/social-services-demographics/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
-  ]);
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["social-services-demographics"],
+  );
+  const includeSocialServices = includedIds.includes("social-services-demographics");
+  const recordsResult = includeSocialServices
+    ? await fetchApi<QueryResult>("/datasets/social-services-demographics/query", viewer.context)
+    : ({ ok: true, status: 200, data: null } as const);
   const records = asRecords(recordsResult.ok ? recordsResult.data : null);
   const sortedRecords = [...records].sort((a, b) => Number(b.population ?? 0) - Number(a.population ?? 0));
   const maxPopulation = Math.max(...sortedRecords.map((record) => Number(record.population ?? 0)), 1);
@@ -62,7 +69,7 @@ export default async function SocialServicesPage({ searchParams }: PageProps) {
         }}
         title="Social services workspace"
         summary="This page defaults to the confidential social-services dataset because the user task here is internal service demand planning."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["social-services-demographics"]}
       />
 
@@ -71,7 +78,23 @@ export default async function SocialServicesPage({ searchParams }: PageProps) {
           {recordsResult.error?.reason ?? recordsResult.error?.error ?? "The backend denied this dataset."}
         </div>
       ) : null}
+      {!includeSocialServices ? (
+        <div className="warningBanner">
+          Social services demographics are not included in this workspace.
+        </div>
+      ) : null}
 
+      {!includeSocialServices ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add the social services dataset above to render this analysis.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -125,6 +148,7 @@ export default async function SocialServicesPage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }

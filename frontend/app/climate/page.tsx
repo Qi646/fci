@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -9,10 +9,17 @@ type PageProps = {
 
 export default async function ClimatePage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "climate");
-  const [overlaysResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/climate-risk-overlays/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
-  ]);
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["climate-risk-overlays"],
+  );
+  const includeClimateOverlays = includedIds.includes("climate-risk-overlays");
+  const overlaysResult = includeClimateOverlays
+    ? await fetchApi<QueryResult>("/datasets/climate-risk-overlays/query", viewer.context)
+    : ({ ok: true, status: 200, data: null } as const);
   const overlays = asRecords(overlaysResult.ok ? overlaysResult.data : null);
   const sortedOverlays = [...overlays].sort((a, b) => Number(b.priority_score ?? 0) - Number(a.priority_score ?? 0));
   const avgPriority = Math.round(
@@ -62,7 +69,7 @@ export default async function ClimatePage({ searchParams }: PageProps) {
         }}
         title="Climate workspace"
         summary="This view defaults to open climate overlays so it can support both public transparency and broad internal planning without extra setup."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["climate-risk-overlays"]}
       />
 
@@ -71,7 +78,23 @@ export default async function ClimatePage({ searchParams }: PageProps) {
           {overlaysResult.error?.reason ?? overlaysResult.error?.error ?? "The backend denied this dataset."}
         </div>
       ) : null}
+      {!includeClimateOverlays ? (
+        <div className="warningBanner">
+          Climate risk overlays are not included in this workspace.
+        </div>
+      ) : null}
 
+      {!includeClimateOverlays ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add the climate overlays dataset above to render this analysis.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -152,6 +175,7 @@ export default async function ClimatePage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }

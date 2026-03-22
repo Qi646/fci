@@ -25,17 +25,18 @@ type Props = {
 };
 
 function zoneColor(capacity: number) {
-  if (capacity >= 90) return "#b42318";
-  if (capacity >= 75) return "#b88217";
-  return "#2f6b52";
+  if (capacity >= 90) return "#8f4033";
+  if (capacity >= 75) return "#b08a4b";
+  return "#536357";
 }
 
 export default function EngineeringMap({ zones, permits }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
+  const hasFeatures = zones.length > 0 || permits.length > 0;
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) {
+    if (!containerRef.current || mapRef.current || !hasFeatures) {
       return;
     }
 
@@ -119,8 +120,8 @@ export default function EngineeringMap({ zones, permits }: Props) {
         source: "permits",
         paint: {
           "circle-radius": ["get", "radius"],
-          "circle-color": "#1d4ed8",
-          "circle-stroke-color": "#ffffff",
+          "circle-color": "#6f7c86",
+          "circle-stroke-color": "#f6f0e4",
           "circle-stroke-width": 1.4,
         },
       });
@@ -135,7 +136,7 @@ export default function EngineeringMap({ zones, permits }: Props) {
           "text-font": ["Noto Sans Regular"],
         },
         paint: {
-          "text-color": "#111111",
+          "text-color": "#2b241d",
         },
       });
     });
@@ -145,7 +146,7 @@ export default function EngineeringMap({ zones, permits }: Props) {
       map.remove();
       mapRef.current = null;
     };
-  }, [permits, zones]);
+  }, [hasFeatures, permits, zones]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -178,7 +179,28 @@ export default function EngineeringMap({ zones, permits }: Props) {
         },
       })),
     });
-  }, [permits, zones]);
+    if (hasFeatures) {
+      const bounds = [
+        [
+          Math.min(...permits.map((permit) => permit.lng), ...zones.map((zone) => zone.centroid_lng)) - 0.01,
+          Math.min(...permits.map((permit) => permit.lat), ...zones.map((zone) => zone.centroid_lat)) - 0.008,
+        ],
+        [
+          Math.max(...permits.map((permit) => permit.lng), ...zones.map((zone) => zone.centroid_lng)) + 0.01,
+          Math.max(...permits.map((permit) => permit.lat), ...zones.map((zone) => zone.centroid_lat)) + 0.008,
+        ],
+      ] satisfies LngLatBoundsLike;
+      map.fitBounds(bounds, { padding: 28, duration: 0 });
+    }
+  }, [hasFeatures, permits, zones]);
+
+  if (!hasFeatures) {
+    return (
+      <div className="maplibreCanvas mapEmptyState" aria-label="Engineering basemap">
+        No map layers selected for this workspace.
+      </div>
+    );
+  }
 
   return <div ref={containerRef} className="maplibreCanvas" aria-label="Engineering basemap" />;
 }

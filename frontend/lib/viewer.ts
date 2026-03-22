@@ -29,6 +29,13 @@ function firstValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function allValues(value: string | string[] | undefined) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  return value ? [value] : [];
+}
+
 export function departmentLabel(value: string | undefined) {
   return String(value ?? "")
     .split("_")
@@ -85,6 +92,38 @@ export function normalizePurpose(profile: AccessContext, rawPurpose: string | un
     return rawPurpose;
   }
   return profile.purpose ?? approvedPurposes[0] ?? "public_information";
+}
+
+export function normalizeIncludedDatasets(
+  rawInclude: string[],
+  accessibleDatasetIds: string[],
+  defaultIncludedIds: string[],
+) {
+  const allowed = new Set(accessibleDatasetIds);
+  const requested = rawInclude
+    .flatMap((item) => item.split(","))
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => allowed.has(item));
+
+  if (requested.length > 0) {
+    return [...new Set(requested)];
+  }
+
+  return defaultIncludedIds.filter((item) => allowed.has(item));
+}
+
+export async function resolveIncludedDatasetIds(
+  searchParamsInput: SearchParamsInput,
+  accessibleDatasetIds: string[],
+  defaultIncludedIds: string[],
+) {
+  const searchParams = (await searchParamsInput) ?? {};
+  return normalizeIncludedDatasets(
+    allValues(searchParams.include),
+    accessibleDatasetIds,
+    defaultIncludedIds,
+  );
 }
 
 export async function resolveViewer(

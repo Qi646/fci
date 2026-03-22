@@ -6,7 +6,7 @@ import {
   fetchApi,
   QueryResult,
 } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 import EngineeringMap from "./EngineeringMap";
 
 type PageProps = {
@@ -21,10 +21,22 @@ function tone(capacity: number) {
 
 export default async function EngineeringPage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "engineering");
-  const [zonesResult, permitsResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/eng-pressure-zones/query", viewer.context),
-    fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["eng-pressure-zones", "plan-permits-2024"],
+  );
+  const includeZones = includedIds.includes("eng-pressure-zones");
+  const includePermits = includedIds.includes("plan-permits-2024");
+  const [zonesResult, permitsResult] = await Promise.all([
+    includeZones
+      ? fetchApi<QueryResult>("/datasets/eng-pressure-zones/query", viewer.context)
+      : Promise.resolve({ ok: true, status: 200, data: null } as const),
+    includePermits
+      ? fetchApi<QueryResult>("/datasets/plan-permits-2024/query", viewer.context)
+      : Promise.resolve({ ok: true, status: 200, data: null } as const),
   ]);
 
   const zones = asRecords(zonesResult.ok ? zonesResult.data : null);
@@ -32,6 +44,10 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
   const accessWarnings = [zonesResult, permitsResult]
     .filter((result) => !result.ok)
     .map((result) => result.error?.reason ?? result.error?.error ?? "The backend denied this dataset.");
+  const selectionWarnings = [
+    !includeZones ? "Engineering pressure zones are not included in this workspace." : null,
+    !includePermits ? "Planning permit overlays are not included in this workspace." : null,
+  ].filter((item): item is string => Boolean(item));
 
   const hotspots = zones
     .map((zone) => ({
@@ -103,7 +119,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         }}
         title="Engineering workspace"
         summary="This view defaults to engineering pressure zones plus planning permits because that is the common operational question here: where new housing demand meets water-capacity constraints."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["eng-pressure-zones", "plan-permits-2024"]}
       />
 
@@ -112,7 +128,23 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
           {warning}
         </div>
       ))}
+      {selectionWarnings.map((warning) => (
+        <div key={warning} className="warningBanner">
+          {warning}
+        </div>
+      ))}
 
+      {includedIds.length === 0 ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add at least one approved dataset above to render the engineering analysis view.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -174,6 +206,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }

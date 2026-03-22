@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CatalogDataset } from "../lib/api";
 import {
   accessModeLabel,
   classificationLabel,
   departmentLabel,
+  normalizeIncludedDatasets,
   purposeLabel,
   shareModeLabel,
 } from "../lib/viewer";
@@ -48,15 +49,14 @@ export default function GovernedViewPanel({
   datasets,
   defaultIncludedIds,
 }: Props) {
-  const initialIncluded = useMemo(
-    () => defaultIncludedIds.filter((datasetId) => datasets.some((dataset) => dataset.dataset_id === datasetId && dataset.accessible)),
-    [datasets, defaultIncludedIds],
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const includedIds = normalizeIncludedDatasets(
+    searchParams.getAll("include"),
+    datasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    defaultIncludedIds,
   );
-  const [includedIds, setIncludedIds] = useState<string[]>(initialIncluded);
-
-  useEffect(() => {
-    setIncludedIds(initialIncluded);
-  }, [initialIncluded]);
 
   const included = datasets.filter((dataset) => includedIds.includes(dataset.dataset_id));
   const available = datasets.filter(
@@ -65,15 +65,17 @@ export default function GovernedViewPanel({
   const restricted = datasets.filter((dataset) => !dataset.accessible);
 
   function toggleDataset(datasetId: string) {
-    setIncludedIds((current) =>
-      current.includes(datasetId)
-        ? current.filter((item) => item !== datasetId)
-        : [...current, datasetId],
-    );
+    const nextIncludedIds = includedIds.includes(datasetId)
+      ? includedIds.filter((item) => item !== datasetId)
+      : [...includedIds, datasetId];
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.delete("include");
+    nextIncludedIds.forEach((item) => nextParams.append("include", item));
+    router.replace(`${pathname}?${nextParams.toString()}`);
   }
 
   function accessHref() {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
     params.set("profile", viewer.profileKey);
     params.set("purpose", viewer.purpose);
     return `/access?${params.toString()}`;

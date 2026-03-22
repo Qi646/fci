@@ -1,7 +1,7 @@
 import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
-import { resolveViewer } from "../../lib/viewer";
+import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -13,10 +13,17 @@ function scalePoint(value: number, min: number, max: number, start: number, size
 
 export default async function TransitPage({ searchParams }: PageProps) {
   const viewer = await resolveViewer(searchParams, "transit");
-  const [stopsResult, catalogResult] = await Promise.all([
-    fetchApi<QueryResult>("/datasets/transit-stops/query", viewer.context),
-    fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context),
-  ]);
+  const catalogResult = await fetchApi<CatalogResponse>("/catalog?include_unavailable=true", viewer.context);
+  const catalogDatasets = catalogResult.ok ? catalogResult.data.datasets : [];
+  const includedIds = await resolveIncludedDatasetIds(
+    searchParams,
+    catalogDatasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    ["transit-stops"],
+  );
+  const includeTransitStops = includedIds.includes("transit-stops");
+  const stopsResult = includeTransitStops
+    ? await fetchApi<QueryResult>("/datasets/transit-stops/query", viewer.context)
+    : ({ ok: true, status: 200, data: null } as const);
   const stops = asRecords(stopsResult.ok ? stopsResult.data : null);
   const sortedByBoardings = [...stops].sort((a, b) => Number(b.weekly_boardings ?? 0) - Number(a.weekly_boardings ?? 0));
   const lats = stops.map((stop) => Number(stop.lat ?? 0));
@@ -69,7 +76,7 @@ export default async function TransitPage({ searchParams }: PageProps) {
         }}
         title="Transit workspace"
         summary="This view defaults to the open transit network dataset, which is suitable for broad public or cross-department use without additional sharing steps."
-        datasets={catalogResult.ok ? catalogResult.data.datasets : []}
+        datasets={catalogDatasets}
         defaultIncludedIds={["transit-stops"]}
       />
 
@@ -78,7 +85,23 @@ export default async function TransitPage({ searchParams }: PageProps) {
           {stopsResult.error?.reason ?? stopsResult.error?.error ?? "The backend denied this dataset."}
         </div>
       ) : null}
+      {!includeTransitStops ? (
+        <div className="warningBanner">
+          Transit stops and ridership are not included in this workspace.
+        </div>
+      ) : null}
 
+      {!includeTransitStops ? (
+        <section className="card">
+          <div className="panelHeading">
+            <h2>No datasets selected</h2>
+            <span className="panelMeta">workspace state</span>
+          </div>
+          <p className="sectionLead compact">
+            Add the transit dataset above to render this analysis.
+          </p>
+        </section>
+      ) : (
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -146,6 +169,7 @@ export default async function TransitPage({ searchParams }: PageProps) {
           </div>
         </article>
       </section>
+      )}
     </main>
   );
 }
