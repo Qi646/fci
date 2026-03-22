@@ -6,49 +6,55 @@ const cards = [
   {
     href: "/engineering",
     eyebrow: "Engineering",
-    title: "Spatial map",
-    tag: "Choropleth / markers",
-    blurb: "Assets have location. Problems cluster spatially.",
+    title: "Water capacity geospatial view",
+    tag: "Map / capacity stress",
+    blurb: "Pressure zones, permit load, and utilization hotspots on one operational map.",
+    focus: "Critical zones and permit pressure",
     preview: "previewMap",
   },
   {
     href: "/planning",
     eyebrow: "Planning",
-    title: "Timeline + trend",
-    tag: "Line chart / forecast",
-    blurb: "Growth unfolds over time. Forecasts drive decisions.",
+    title: "Permit issuance over time",
+    tag: "Trend / monthly pipeline",
+    blurb: "Approved units, permit counts, and ward allocation for growth tracking.",
+    focus: "Permit volume and monthly peaks",
     preview: "previewLine",
   },
   {
     href: "/public-health",
     eyebrow: "Public health",
-    title: "Heatmap + alert",
-    tag: "Heatmap / anomaly",
-    blurb: "Clusters reveal outbreak patterns across geography + time.",
+    title: "Case surveillance matrix",
+    tag: "Matrix / alert status",
+    blurb: "Ward-by-case rates with alert thresholds and raw surveillance records.",
+    focus: "Alert wards and case type spikes",
     preview: "previewHeat",
   },
   {
     href: "/transit",
     eyebrow: "Transit",
-    title: "Flow / network",
-    tag: "Network / ridership flow",
-    blurb: "Demand moves between nodes. Line weight = volume.",
+    title: "Stop network / ridership",
+    tag: "Network / stop demand",
+    blurb: "Ridership-ranked corridor view backed by an explicit stop operations table.",
+    focus: "Busiest stops and route load",
     preview: "previewTransit",
   },
   {
     href: "/social-services",
     eyebrow: "Social services",
-    title: "Demographic breakdown",
-    tag: "Bar chart / cohort view",
-    blurb: "Populations segment by age, income, need. Bars clarify scale.",
+    title: "Cohort demand",
+    tag: "Bars / service demand",
+    blurb: "Population, need, and active cases arranged for service planning review.",
+    focus: "Need concentration by cohort",
     preview: "previewBars",
   },
   {
     href: "/climate",
     eyebrow: "Climate / environment",
-    title: "Multi-layer overlay",
-    tag: "Layered map / overlap",
-    blurb: "Multiple risk types overlap. Intersections = highest priority.",
+    title: "Risk priority matrix",
+    tag: "Scatter / composite risk",
+    blurb: "Flood, heat, and air-quality risk combined into a ward-level priority view.",
+    focus: "High-risk wards and overlap",
     preview: "previewOverlay",
   },
 ];
@@ -62,10 +68,10 @@ export default async function Home() {
       <section className="launcherHeader">
         <div>
           <p className="sectionKicker">Municipal dashboard</p>
-          <h1>Choose a municipal lens.</h1>
+          <h1>Operational views, not demo cards.</h1>
           <p className="sectionLead">
-            Each domain gets its own visualization grammar. The home page is a launcher into the
-            actual municipal views.
+            Each domain page exposes the primary operational signal, its supporting detail, and the
+            governed datasets behind it. Start from the workload you need to review.
           </p>
           {!apiReachable ? (
             <div className="warningBanner">
@@ -77,23 +83,23 @@ export default async function Home() {
       </section>
 
       <DataControls
-        title="How To Use This Demo"
-        summary="Choose a municipal view first. Use the Access page to define sharing defaults. Inside each view, the data shown already reflects those defaults, so people can focus on the analysis instead of policy language."
+        title="Operating Model"
+        summary="Access rules are set once on the Access page. Each operational view then renders the dataset mix and delivery defaults that its users are allowed to see, so the workflow stays focused on analysis rather than governance overhead."
         datasets={[
           {
-            name: "Set sharing on the Access page",
-            defaultState: "Recommended",
-            detail: "Owners and stewards decide which departments can use a dataset and whether shared views should default to raw, masked, or aggregate output.",
+            name: "Define sharing defaults",
+            defaultState: "Access workspace",
+            detail: "Dataset owners choose sharing policy, allowed departments, and default delivery level for downstream viewers.",
           },
           {
             name: "Open a department view",
-            defaultState: "Recommended",
-            detail: "Each page focuses on the data that department would typically use, with safe defaults already applied.",
+            defaultState: "Operational",
+            detail: "Each page is tuned to the primary question that department needs to answer, with only the relevant data surfaced first.",
           },
           {
-            name: "Adjust page-level data choices",
-            defaultState: "Coming next",
-            detail: "Per-page controls should let users turn approved datasets and layers on or off without managing governance there.",
+            name: "Adjust page-level choices",
+            defaultState: "Planned",
+            detail: "Next step: local layer toggles and view filters without pushing governance decisions into the analysis workflow.",
           },
         ]}
       />
@@ -101,13 +107,18 @@ export default async function Home() {
       <section className="launcherGrid">
         {cards.map((card) => (
           <Link key={card.href} href={card.href} className="launcherCard">
-            <div className="launcherText">
-              <p>{card.eyebrow}</p>
-              <h2>{card.title}</h2>
+            <div className="launcherCardMain">
+              <div className="launcherText">
+                <p className="launcherEyebrow">{card.eyebrow}</p>
+                <h2>{card.title}</h2>
+                <p className="launcherBlurb">{card.blurb}</p>
+              </div>
+              <div className="launcherMeta">
+                <span className="previewTag">{card.tag}</span>
+                <span className="launcherFocus">Focus: {card.focus}</span>
+              </div>
             </div>
             <div className={`previewFrame ${card.preview}`} />
-            <div className="previewTag">{card.tag}</div>
-            <p className="launcherBlurb">{card.blurb}</p>
           </Link>
         ))}
       </section>

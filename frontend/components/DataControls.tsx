@@ -22,7 +22,7 @@ export default function DataControls({
           <p className="sectionKicker">View Controls</p>
           <h2>{title}</h2>
         </div>
-        <span className="dataControlsHint">Reasonable defaults applied</span>
+        <span className="dataControlsHint">Defaults enforced</span>
       </div>
       <p className="dataControlsSummary">{summary}</p>
       <div className="dataControlsGrid">

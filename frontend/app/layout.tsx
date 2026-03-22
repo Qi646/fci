@@ -1,23 +1,23 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Source_Sans_3 } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import AppHeader from "../components/AppHeader";
 
-const displayFont = Cormorant_Garamond({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["500", "600", "700"],
-});
-
-const bodyFont = Source_Sans_3({
+const bodyFont = IBM_Plex_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["400", "500", "600", "700"],
 });
 
+const monoFont = IBM_Plex_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["500", "600"],
+});
+
 export const metadata: Metadata = {
   title: "Municipal Data Infrastructure",
-  description: "Fast prototype for a municipal data access layer and visualization frontend.",
+  description: "Municipal operations console for cross-department data access and analysis.",
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${displayFont.variable} ${bodyFont.variable}`}>
+      <body className={`${bodyFont.variable} ${monoFont.variable}`}>
         <AppHeader />
         {children}
       </body>

@@ -9,9 +9,12 @@ export default function AppHeader() {
   return (
     <header className="appHeader">
       <div className="appHeaderInner">
-        <Link href="/" className="appBrand">
-          Municipal Data Infrastructure
-        </Link>
+        <div className="appBrandBlock">
+          <p className="appBrandEyebrow">Municipal Operations Console</p>
+          <Link href="/" className="appBrand">
+            Data Infrastructure
+          </Link>
+        </div>
         <nav className="appNav" aria-label="Primary">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className="appNavLink">

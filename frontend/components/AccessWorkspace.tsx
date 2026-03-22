@@ -180,19 +180,31 @@ export default function AccessWorkspace() {
 
   return (
     <div className="accessWorkspace">
-      <section className="card">
-        <div className="panelHeading">
-          <h2>What These Choices Mean</h2>
-          <span className="panelMeta">plain-language policy guide</span>
-        </div>
-        <div className="dataControlsGrid">
-          {glossary.map((item) => (
-            <article key={item.label} className="dataControlCard">
-              <strong>{item.label}</strong>
-              <p>{item.detail}</p>
-            </article>
-          ))}
-        </div>
+      <section className="accessWorkspaceTop">
+        <article className="accessPanel">
+          <div className="accessPanelHeader">
+            <div>
+              <p className="sectionKicker">Access administration</p>
+              <h2>Dataset sharing defaults</h2>
+            </div>
+            <div className="accessIdentity">
+              <span className="policyBadge strong">Admin workspace</span>
+              <span className="policyBadge">Backend-backed settings</span>
+            </div>
+          </div>
+          <p className="accessSummary">
+            Configure who can use each dataset, what shared dashboards should show by default, and
+            which departments are allowed to access the source data.
+          </p>
+          <div className="policyGlossary">
+            {glossary.map((item) => (
+              <article key={item.label} className="policyGlossaryItem">
+                <strong>{item.label}</strong>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
+        </article>
       </section>
 
       {message ? <p className="accessStatus">{message}</p> : null}
@@ -203,31 +215,86 @@ export default function AccessWorkspace() {
           return (
             <article key={dataset.dataset_id} className="accessEditorCard">
               <div className="accessEditorHeader">
-                <div>
+                <div className="accessEditorTitleBlock">
                   <p className="sectionKicker">{titleCase(dataset.owner_department)}</p>
                   <h2>{dataset.dataset_name}</h2>
                 </div>
-                <span className="controlState">{titleCase(dataset.classification)}</span>
+                <div className="accessMetaList">
+                  <div className="accessMetaRow">
+                    <span className="policyLabel">Classification</span>
+                    <span className="policyBadge">{titleCase(dataset.classification)}</span>
+                  </div>
+                  <div className="accessMetaRow">
+                    <span className="policyLabel">Default delivery</span>
+                    <span className="policyBadge">
+                      {deliveryLabels[draft.default_delivery] ?? titleCase(draft.default_delivery)}
+                    </span>
+                  </div>
+                  <div className="accessMetaRow">
+                    <span className="policyLabel">Dataset id</span>
+                    <span className="controlState">{dataset.dataset_id}</span>
+                  </div>
+                </div>
               </div>
 
-              <label className="fieldGroup">
-                <span>Who should be able to use this data?</span>
-                <select
-                  value={draft.sharing_policy}
-                  onChange={(event) =>
-                    updateDraft(dataset.dataset_id, { sharing_policy: event.target.value })
-                  }
-                >
-                  {Object.entries(response.sharing_policy_options).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="accessEditorSection">
+                <div className="fieldGroup accessField">
+                  <span>Who should be able to use this data?</span>
+                  <select
+                    value={draft.sharing_policy}
+                    onChange={(event) =>
+                      updateDraft(dataset.dataset_id, { sharing_policy: event.target.value })
+                    }
+                  >
+                    {Object.entries(response.sharing_policy_options).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-              <div className="fieldGroup">
-                <span>Which departments should get access?</span>
+              <div className="accessEditorSection">
+                <div className="fieldGroup accessField">
+                  <span>What should other dashboards show by default?</span>
+                  <select
+                    value={draft.default_delivery}
+                    onChange={(event) =>
+                      updateDraft(dataset.dataset_id, { default_delivery: event.target.value })
+                    }
+                  >
+                    {Object.entries(response.delivery_options).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="accessEditorSection">
+                <label className="fieldGroup">
+                  <span>Viewer note</span>
+                  <textarea
+                    value={draft.viewer_note}
+                    rows={3}
+                    onChange={(event) =>
+                      updateDraft(dataset.dataset_id, { viewer_note: event.target.value })
+                    }
+                  />
+                </label>
+              </div>
+
+              <section className="accessDepartmentBlock" aria-label="Allowed departments">
+                <div className="accessBlockHeader">
+                  <span className="policyLabel">Allowed departments</span>
+                  <span className="panelMeta">
+                    {draft.sharing_policy === "public" || draft.sharing_policy === "municipal_internal"
+                      ? "Department selection disabled by policy"
+                      : "Choose the teams that may use this dataset"}
+                  </span>
+                </div>
                 <div className="checkboxGrid">
                   {Object.entries(response.department_options)
                     .filter(([key]) => key !== "city_manager")
@@ -244,45 +311,20 @@ export default function AccessWorkspace() {
                             disabled={disabled}
                             onChange={() => toggleDepartment(dataset.dataset_id, value)}
                           />
-                          <span>{label}</span>
+                          <span className="checkboxLabel">{label}</span>
                         </label>
                       );
                     })}
                 </div>
-              </div>
+              </section>
 
-              <label className="fieldGroup">
-                <span>What should other dashboards show by default?</span>
-                <select
-                  value={draft.default_delivery}
-                  onChange={(event) =>
-                    updateDraft(dataset.dataset_id, { default_delivery: event.target.value })
-                  }
-                >
-                  {Object.entries(response.delivery_options).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <label className="fieldGroup">
-                <span>Viewer note</span>
-                <textarea
-                  value={draft.viewer_note}
-                  rows={3}
-                  onChange={(event) =>
-                    updateDraft(dataset.dataset_id, { viewer_note: event.target.value })
-                  }
-                />
-              </label>
-
-              <div className="accessSummaryStrip">
-                <span>
-                  Default for viewers:{" "}
-                  <strong>{deliveryLabels[draft.default_delivery] ?? titleCase(draft.default_delivery)}</strong>
-                </span>
+              <div className="accessActions">
+                <div className="accessActionSummary">
+                  <span className="policyLabel">Current viewer default</span>
+                  <strong>
+                    {deliveryLabels[draft.default_delivery] ?? titleCase(draft.default_delivery)}
+                  </strong>
+                </div>
                 <button
                   type="button"
                   className="saveButton"
