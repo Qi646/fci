@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 import EngineeringMap from "./EngineeringMap";
 
 function tone(capacity: number) {
@@ -9,8 +10,12 @@ function tone(capacity: number) {
 }
 
 export default async function EngineeringPage() {
-  const zones = asRecords(await fetchJson<QueryResult>("/datasets/eng-pressure-zones/query"));
-  const permits = asRecords(await fetchJson<QueryResult>("/datasets/plan-permits-2024/query"));
+  const zones = asRecords(
+    await fetchJson<QueryResult>("/datasets/eng-pressure-zones/query", accessProfiles.engineering),
+  );
+  const permits = asRecords(
+    await fetchJson<QueryResult>("/datasets/plan-permits-2024/query", accessProfiles.engineering),
+  );
 
   const hotspots = zones
     .map((zone) => ({
@@ -22,8 +27,14 @@ export default async function EngineeringPage() {
     }))
     .sort((a, b) => b.capacity - a.capacity);
 
-  const lats = [...zones.map((zone) => Number(zone.centroid_lat ?? 0)), ...permits.map((permit) => Number(permit.lat ?? 0))];
-  const lngs = [...zones.map((zone) => Number(zone.centroid_lng ?? 0)), ...permits.map((permit) => Number(permit.lng ?? 0))];
+  const lats = [
+    ...zones.map((zone) => Number(zone.centroid_lat ?? 0)),
+    ...permits.map((permit) => Number(permit.lat ?? 0)),
+  ];
+  const lngs = [
+    ...zones.map((zone) => Number(zone.centroid_lng ?? 0)),
+    ...permits.map((permit) => Number(permit.lng ?? 0)),
+  ];
   const bounds = {
     minLat: Math.min(...lats),
     maxLat: Math.max(...lats),
@@ -64,6 +75,22 @@ export default async function EngineeringPage() {
           <strong>{avgCapacity}%</strong>
         </article>
       </section>
+
+      <DataControls
+        summary="This view defaults to engineering pressure zones plus planning permits because that is the common operational question here: where new housing demand meets water-capacity constraints."
+        datasets={[
+          {
+            name: "Engineering Pressure Zones",
+            defaultState: "On",
+            detail: "Primary layer for this page. Capacity markers and zone table are based on engineering-owned data.",
+          },
+          {
+            name: "Planning Residential Permits",
+            defaultState: "On, hidden personal fields",
+            detail: "Shared in by default because permit activity is the main driver of capacity stress. Personal fields stay hidden when engineering views it.",
+          },
+        ]}
+      />
 
       <section className="twoUp">
         <article className="card">

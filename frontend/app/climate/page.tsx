@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 
 export default async function ClimatePage() {
-  const overlays = asRecords(await fetchJson<QueryResult>("/datasets/climate-risk-overlays/query", "public"));
+  const overlays = asRecords(
+    await fetchJson<QueryResult>("/datasets/climate-risk-overlays/query", accessProfiles.publicPortal),
+  );
   const sortedOverlays = [...overlays].sort((a, b) => Number(b.priority_score ?? 0) - Number(a.priority_score ?? 0));
   const avgPriority = Math.round(
     sortedOverlays.reduce((sum, overlay) => sum + Number(overlay.priority_score ?? 0), 0) /
@@ -40,6 +43,17 @@ export default async function ClimatePage() {
         </article>
       </section>
 
+      <DataControls
+        summary="This view defaults to open climate overlays so it can support both public transparency and broad internal planning without extra setup."
+        datasets={[
+          {
+            name: "Climate Risk Overlays",
+            defaultState: "On",
+            detail: "Open environmental risk information suitable for public and cross-department use.",
+          },
+        ]}
+      />
+
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -55,8 +69,12 @@ export default async function ClimatePage() {
                 <g key={tick}>
                   <line x1={x} y1="20" x2={x} y2="168" className="gridLine" />
                   <line x1="44" y1={y} x2="288" y2={y} className="gridLine" />
-                  <text x={x} y="186" textAnchor="middle" className="axisText">{tick}</text>
-                  <text x="34" y={y + 4} textAnchor="end" className="axisText">{tick}</text>
+                  <text x={x} y="186" textAnchor="middle" className="axisText">
+                    {tick}
+                  </text>
+                  <text x="34" y={y + 4} textAnchor="end" className="axisText">
+                    {tick}
+                  </text>
                 </g>
               );
             })}
@@ -75,8 +93,12 @@ export default async function ClimatePage() {
                 </g>
               );
             })}
-            <text x="166" y="206" textAnchor="middle" className="axisText">flood risk</text>
-            <text x="12" y="96" transform="rotate(-90 12 96)" textAnchor="middle" className="axisText">heat risk</text>
+            <text x="166" y="206" textAnchor="middle" className="axisText">
+              flood risk
+            </text>
+            <text x="12" y="96" transform="rotate(-90 12 96)" textAnchor="middle" className="axisText">
+              heat risk
+            </text>
           </svg>
           <p className="annotation">Marker area = air-quality risk.</p>
         </article>

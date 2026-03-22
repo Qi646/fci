@@ -2,6 +2,19 @@
   "dataset_id": "social-services-demographics",
   "name": "Social Services Demographics",
   "owner_dept": "Social Services",
+  "owner_department": "social_services",
+  "classification": "confidential",
+  "share_mode": "approved_purpose_access",
+  "allowed_consumer_departments": ["social_services", "planning"],
+  "permitted_use_cases": ["service_delivery", "service_planning"],
+  "field_mask_rules": {
+    "default": []
+  },
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
   "access_tier": "internal",
   "spatial_key": "ward",
   "last_updated": "2026-03-22T09:00:00Z",

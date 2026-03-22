@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { API_BASE, fetchJson } from "../lib/api";
+import DataControls from "../components/DataControls";
+import { accessProfiles, API_BASE, fetchJson } from "../lib/api";
 
 const cards = [
   {
@@ -53,7 +54,7 @@ const cards = [
 ];
 
 export default async function Home() {
-  const health = await fetchJson<{ status: string }>("/health", "public");
+  const health = await fetchJson<{ status: string }>("/health", accessProfiles.publicPortal);
   const apiReachable = Boolean(health?.status === "ok");
 
   return (
@@ -74,6 +75,28 @@ export default async function Home() {
           ) : null}
         </div>
       </section>
+
+      <DataControls
+        title="How To Use This Demo"
+        summary="Choose a municipal view first. Use the Access page to define sharing defaults. Inside each view, the data shown already reflects those defaults, so people can focus on the analysis instead of policy language."
+        datasets={[
+          {
+            name: "Set sharing on the Access page",
+            defaultState: "Recommended",
+            detail: "Owners and stewards decide which departments can use a dataset and whether shared views should default to raw, masked, or aggregate output.",
+          },
+          {
+            name: "Open a department view",
+            defaultState: "Recommended",
+            detail: "Each page focuses on the data that department would typically use, with safe defaults already applied.",
+          },
+          {
+            name: "Adjust page-level data choices",
+            defaultState: "Coming next",
+            detail: "Per-page controls should let users turn approved datasets and layers on or off without managing governance there.",
+          },
+        ]}
+      />
 
       <section className="launcherGrid">
         {cards.map((card) => (

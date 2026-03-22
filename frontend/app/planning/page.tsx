@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 
 function buildSeries(records: Array<Record<string, unknown>>) {
   const monthly = new Map<string, { units: number; permits: number }>();
@@ -25,14 +26,19 @@ function linePoints(values: number[], width: number, height: number) {
 }
 
 export default async function PlanningPage() {
-  const permits = asRecords(await fetchJson<QueryResult>("/datasets/plan-permits-2024/query"));
+  const permits = asRecords(
+    await fetchJson<QueryResult>("/datasets/plan-permits-2024/query", accessProfiles.planning),
+  );
   const series = buildSeries(permits);
   const unitValues = series.map(([, value]) => value.units);
   const permitValues = series.map(([, value]) => value.permits);
   const totalUnits = unitValues.reduce((sum, value) => sum + value, 0);
   const infillShare =
     permits.filter((record) => record.permit_type === "infill").length / Math.max(permits.length, 1);
-  const topMonth = series.reduce((best, current) => (current[1].units > best[1].units ? current : best), series[0] ?? ["n/a", { units: 0, permits: 0 }]);
+  const topMonth = series.reduce(
+    (best, current) => (current[1].units > best[1].units ? current : best),
+    series[0] ?? ["n/a", { units: 0, permits: 0 }],
+  );
   const wardRows = Object.entries(
     permits.reduce<Record<string, number>>((acc, permit) => {
       const ward = String(permit.ward ?? "Unknown");
@@ -72,6 +78,17 @@ export default async function PlanningPage() {
           <strong>{topMonth[0]}</strong>
         </article>
       </section>
+
+      <DataControls
+        summary="This page starts with planning’s own permit pipeline because that is the default dataset a planner expects to review here."
+        datasets={[
+          {
+            name: "Planning Residential Permits",
+            defaultState: "On",
+            detail: "Shown directly for housing forecasting and permitting analysis. Owner-department users get the normal internal view.",
+          },
+        ]}
+      />
 
       <section className="twoUp">
         <article className="card">

@@ -1,0 +1,79 @@
+[
+  {
+    "dataset_id": "eng-pressure-zones",
+    "dataset_name": "Engineering Pressure Zones",
+    "owner_department": "engineering",
+    "classification": "internal",
+    "sharing_policy": "department_access",
+    "allowed_departments": [
+      "climate",
+      "engineering",
+      "planning"
+    ],
+    "default_delivery": "full_detail",
+    "viewer_note": "Use this for infrastructure and capacity planning."
+  },
+  {
+    "dataset_id": "plan-permits-2024",
+    "dataset_name": "Planning Residential Permits",
+    "owner_department": "planning",
+    "classification": "personal_sensitive",
+    "sharing_policy": "masked_department_access",
+    "allowed_departments": [
+      "engineering",
+      "planning"
+    ],
+    "default_delivery": "hidden_personal_fields",
+    "viewer_note": "Shared planning permits should hide applicant-related fields outside planning."
+  },
+  {
+    "dataset_id": "health-cases",
+    "dataset_name": "Public Health Weekly Cases",
+    "owner_department": "public_health",
+    "classification": "health_sensitive",
+    "sharing_policy": "summary_only_department_access",
+    "allowed_departments": [
+      "planning",
+      "public_health"
+    ],
+    "default_delivery": "summary_only",
+    "viewer_note": "Other departments should only see summary health indicators, not raw surveillance rows."
+  },
+  {
+    "dataset_id": "transit-stops",
+    "dataset_name": "Transit Stops and Ridership",
+    "owner_department": "transit",
+    "classification": "open",
+    "sharing_policy": "public",
+    "allowed_departments": [
+      "public"
+    ],
+    "default_delivery": "full_detail",
+    "viewer_note": "Safe for public-facing operational dashboards."
+  },
+  {
+    "dataset_id": "social-services-demographics",
+    "dataset_name": "Social Services Demographics",
+    "owner_department": "social_services",
+    "classification": "confidential",
+    "sharing_policy": "department_access",
+    "allowed_departments": [
+      "planning",
+      "social_services"
+    ],
+    "default_delivery": "full_detail",
+    "viewer_note": "Keep this for approved internal program planning only."
+  },
+  {
+    "dataset_id": "climate-risk-overlays",
+    "dataset_name": "Climate Risk Overlays",
+    "owner_department": "climate",
+    "classification": "open",
+    "sharing_policy": "public",
+    "allowed_departments": [
+      "public"
+    ],
+    "default_delivery": "full_detail",
+    "viewer_note": "Open environmental risk layer suitable for public use."
+  }
+]

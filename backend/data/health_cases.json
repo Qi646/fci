@@ -2,6 +2,28 @@
   "dataset_id": "health-cases",
   "name": "Public Health Weekly Cases",
   "owner_dept": "Public Health",
+  "owner_department": "public_health",
+  "classification": "health_sensitive",
+  "share_mode": "approved_purpose_access",
+  "allowed_consumer_departments": ["public_health", "planning"],
+  "permitted_use_cases": ["outbreak_monitoring", "service_planning"],
+  "access_clearance_overrides": {
+    "aggregate": "internal"
+  },
+  "field_mask_rules": {
+    "default": []
+  },
+  "row_filter_rules": [
+    {
+      "consumer_department": "planning",
+      "purposes": ["service_planning"],
+      "condition": "aggregate_only"
+    }
+  ],
+  "join_policy": {
+    "allow_cross_department_join": false,
+    "allow_raw_row_output": false
+  },
   "access_tier": "restricted",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",

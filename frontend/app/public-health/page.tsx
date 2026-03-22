@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 
 export default async function PublicHealthPage() {
-  const records = asRecords(await fetchJson<QueryResult>("/datasets/health-cases/query", "health_steward"));
+  const records = asRecords(
+    await fetchJson<QueryResult>("/datasets/health-cases/query", accessProfiles.publicHealth),
+  );
   const wards = [...new Set(records.map((record) => String(record.ward)))];
   const caseTypes = [...new Set(records.map((record) => String(record.case_type)))];
   const alertCount = records.filter((record) => Boolean(record.alert)).length;
@@ -45,6 +48,17 @@ export default async function PublicHealthPage() {
           <strong>{avgRate}</strong>
         </article>
       </section>
+
+      <DataControls
+        summary="This page defaults to the health surveillance dataset because it is the operational source for monitoring weekly case patterns and alerts."
+        datasets={[
+          {
+            name: "Public Health Weekly Cases",
+            defaultState: "On",
+            detail: "Owner-department stewardship view. Other departments should see only approved summary output, not this raw table.",
+          },
+        ]}
+      />
 
       <section className="twoUp">
         <article className="card">
@@ -113,7 +127,13 @@ export default async function PublicHealthPage() {
                     <td>{String(record.week_start)}</td>
                     <td>{String(record.case_count)}</td>
                     <td>{Number(record.rate_per_1000 ?? 0).toFixed(1)}</td>
-                    <td>{record.alert ? <span className="statusBadge critical">alert</span> : <span className="statusBadge safe">stable</span>}</td>
+                    <td>
+                      {record.alert ? (
+                        <span className="statusBadge critical">alert</span>
+                      ) : (
+                        <span className="statusBadge safe">stable</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

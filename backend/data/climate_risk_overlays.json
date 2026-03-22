@@ -2,6 +2,19 @@
   "dataset_id": "climate-risk-overlays",
   "name": "Climate Risk Overlays",
   "owner_dept": "Climate and Environment",
+  "owner_department": "climate",
+  "classification": "open",
+  "share_mode": "open",
+  "allowed_consumer_departments": [],
+  "permitted_use_cases": ["public_information", "climate_resilience", "service_planning"],
+  "field_mask_rules": {
+    "default": []
+  },
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
   "access_tier": "open",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",

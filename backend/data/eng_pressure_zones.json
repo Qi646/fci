@@ -2,6 +2,19 @@
   "dataset_id": "eng-pressure-zones",
   "name": "Engineering Pressure Zones",
   "owner_dept": "Engineering",
+  "owner_department": "engineering",
+  "classification": "internal",
+  "share_mode": "approved_purpose_access",
+  "allowed_consumer_departments": ["engineering", "planning", "climate"],
+  "permitted_use_cases": ["infrastructure_operations", "capital_planning", "service_planning", "climate_resilience"],
+  "field_mask_rules": {
+    "default": []
+  },
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
   "access_tier": "internal",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",

@@ -2,6 +2,24 @@
   "dataset_id": "plan-permits-2024",
   "name": "Planning Residential Permits",
   "owner_dept": "Planning",
+  "owner_department": "planning",
+  "classification": "personal_sensitive",
+  "share_mode": "restricted_row_or_field_access",
+  "allowed_consumer_departments": ["planning", "engineering"],
+  "permitted_use_cases": ["housing_forecast", "service_planning", "infrastructure_operations"],
+  "access_clearance_overrides": {
+    "masked": "internal"
+  },
+  "field_mask_rules": {
+    "default": ["applicant_name"],
+    "allow_unmasked_for_roles": ["planning_manager"],
+    "allow_unmasked_for_departments": ["planning"]
+  },
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
   "access_tier": "internal",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",

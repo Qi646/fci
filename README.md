@@ -36,3 +36,26 @@ Set `NEXT_PUBLIC_API_BASE_URL` if the backend is not on `127.0.0.1:8000`.
 - `GET /datasets/{dataset_id}/query`
 - `POST /join`
 - `GET /audit`
+
+## Architecture notes
+
+- Production-oriented municipal access control model: [MUNICIPAL_ACCESS_MODEL.md](/home/qi/proj/fci/MUNICIPAL_ACCESS_MODEL.md)
+
+## Access control
+
+The prototype now uses a mock municipal identity directory plus purpose-based policy enforcement.
+
+- Send `Authorization: Bearer <user_id>`
+- Send `X-Purpose: <approved-purpose>`
+- The backend evaluates department, classification, share mode, purpose, masking, join rules, and audit permissions
+
+Useful demo users:
+
+- `public_portal`
+- `eng_analyst`
+- `planner`
+- `health_steward`
+- `social_manager`
+- `transit_analyst`
+- `climate_analyst`
+- `city_admin`

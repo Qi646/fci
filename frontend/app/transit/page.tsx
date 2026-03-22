@@ -1,12 +1,15 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 
 function scalePoint(value: number, min: number, max: number, start: number, size: number) {
   return start + ((value - min) / Math.max(max - min, 0.001)) * size;
 }
 
 export default async function TransitPage() {
-  const stops = asRecords(await fetchJson<QueryResult>("/datasets/transit-stops/query", "public"));
+  const stops = asRecords(
+    await fetchJson<QueryResult>("/datasets/transit-stops/query", accessProfiles.publicPortal),
+  );
   const sortedByBoardings = [...stops].sort((a, b) => Number(b.weekly_boardings ?? 0) - Number(a.weekly_boardings ?? 0));
   const lats = stops.map((stop) => Number(stop.lat ?? 0));
   const lngs = stops.map((stop) => Number(stop.lng ?? 0));
@@ -47,6 +50,17 @@ export default async function TransitPage() {
         </article>
       </section>
 
+      <DataControls
+        summary="This view defaults to the open transit network dataset, which is suitable for broad public or cross-department use without additional sharing steps."
+        datasets={[
+          {
+            name: "Transit Stops and Ridership",
+            defaultState: "On",
+            detail: "Open operational summary data. Safe for public dashboards and general planning use.",
+          },
+        ]}
+      />
+
       <section className="twoUp">
         <article className="card">
           <div className="panelHeading">
@@ -80,7 +94,9 @@ export default async function TransitPage() {
               );
             })}
           </svg>
-          <p className="annotation">Node area = boardings. Sequence follows ridership rank, not route timetable.</p>
+          <p className="annotation">
+            Node area = boardings. Sequence follows ridership rank, not route timetable.
+          </p>
         </article>
 
         <article className="card">

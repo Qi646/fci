@@ -1,8 +1,14 @@
 import Link from "next/link";
-import { asRecords, fetchJson, QueryResult } from "../../lib/api";
+import DataControls from "../../components/DataControls";
+import { accessProfiles, asRecords, fetchJson, QueryResult } from "../../lib/api";
 
 export default async function SocialServicesPage() {
-  const records = asRecords(await fetchJson<QueryResult>("/datasets/social-services-demographics/query"));
+  const records = asRecords(
+    await fetchJson<QueryResult>(
+      "/datasets/social-services-demographics/query",
+      accessProfiles.socialServices,
+    ),
+  );
   const sortedRecords = [...records].sort((a, b) => Number(b.population ?? 0) - Number(a.population ?? 0));
   const maxPopulation = Math.max(...sortedRecords.map((record) => Number(record.population ?? 0)), 1);
   const totalPopulation = sortedRecords.reduce((sum, record) => sum + Number(record.population ?? 0), 0);
@@ -39,6 +45,17 @@ export default async function SocialServicesPage() {
           <strong>{totalCases}</strong>
         </article>
       </section>
+
+      <DataControls
+        summary="This page defaults to the confidential social-services dataset because the user task here is internal service demand planning."
+        datasets={[
+          {
+            name: "Social Services Demographics",
+            defaultState: "On, approved departments only",
+            detail: "Confidential data for approved service programs. This should not appear in public-facing views.",
+          },
+        ]}
+      />
 
       <section className="twoUp">
         <article className="card">
