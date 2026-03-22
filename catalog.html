@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Catalog Browser - Municipal Data Infrastructure</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    header { text-align: center; margin-bottom: 30px; padding: 30px; background: linear-gradient(135deg, #161b22, #238636); border-radius: 12px; }
+    h1 { font-size: 2rem; margin-bottom: 10px; color: #fff; }
+    .subtitle { color: #8b949e; }
+    .controls { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+    .search-box { flex: 1; min-width: 300px; }
+    .search-box input { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #fff; font-size: 1rem; }
+    .search-box input:focus { outline: none; border-color: #238636; }
+    .role-selector select { padding: 12px 16px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; color: #fff; font-size: 1rem; min-width: 200px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-2px); border-color: #238636; }
+    .card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; }
+    .card-title { font-size: 1.1rem; font-weight: 600; color: #fff; }
+    .tier-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .tier-open { background: #238636; color: #fff; }
+    .tier-internal { background: #1f6feb; color: #fff; }
+    .tier-restricted { background: #a371f7; color: #fff; }
+    .tier-confidential { background: #f85149; color: #fff; }
+    .card-meta { font-size: 0.85rem; color: #8b949e; margin-bottom: 12px; }
+    .card-meta span { margin-right: 15px; }
+    .card-description { font-size: 0.9rem; line-height: 1.5; color: #c9d1d9; margin-bottom: 15px; }
+    .joinable-section { background: #0d1117; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+    .joinable-title { font-size: 0.8rem; color: #8b949e; margin-bottom: 8px; }
+    .joinable-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+    .join-icon { color: #00d9ff; }
+    .join-btn { width: 100%; padding: 10px; border: none; border-radius: 6px; background: #238636; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .join-btn:hover { background: #2ea043; }
+    .join-btn:disabled { background: #484f58; cursor: not-allowed; }
+    .join-result { margin-top: 20px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; }
+    .join-result h3 { color: #00d9ff; margin-bottom: 15px; }
+    .join-result table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .join-result th, .join-result td { padding: 10px; text-align: left; border-bottom: 1px solid #30363d; }
+    .join-result th { color: #8b949e; font-weight: 500; }
+    .audit-section { margin-top: 30px; }
+    .audit-section h2 { color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+    .audit-log { background: #161b22; border: 1px solid #30363d; border-radius: 12px; max-height: 400px; overflow-y: auto; }
+    .audit-entry { padding: 12px 16px; border-bottom: 1px solid #30363d; font-size: 0.85rem; display: flex; gap: 15px; align-items: start; }
+    .audit-entry:last-child { border-bottom: none; }
+    .audit-time { color: #8b949e; min-width: 180px; }
+    .audit-action { font-weight: 600; }
+    .audit-action.success { color: #238636; }
+    .audit-action.blocked { color: #f85149; }
+    .audit-action.query { color: #1f6feb; }
+    .audit-action.join_success { color: #00d9ff; }
+    .audit-details { color: #8b949e; flex: 1; }
+    .block-demo { margin-top: 15px; padding-top: 15px; border-top: 1px solid #30363d; }
+    .block-btn { padding: 8px 16px; border: 1px solid #f85149; border-radius: 6px; background: transparent; color: #f85149; cursor: pointer; }
+    .block-btn:hover { background: #f8514920; }
+    .loading { text-align: center; padding: 40px; color: #8b949e; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #8b949e; }
+    .empty-state h3 { margin-bottom: 10px; color: #c9d1d9; }
+    .quality-score { display: inline-flex; align-items: center; gap: 5px; }
+    .quality-bar { width: 60px; height: 6px; background: #30363d; border-radius: 3px; overflow: hidden; }
+    .quality-fill { height: 100%; background: #238636; }
+    .spatial-key { font-family: monospace; background: #0d1117; padding: 2px 6px; border-radius: 4px; color: #00d9ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Municipal Data Catalog</h1>
+      <p class="subtitle">Federated data infrastructure for Region of Waterloo departments</p>
+    </header>
+    
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search datasets... (try 'water capacity' or 'permit')">
+      </div>
+      <div class="role-selector">
+        <select id="roleSelect">
+          <option value="public">Public (Open data only)</option>
+          <option value="eng_staff" selected>Engineering Staff</option>
+          <option value="plan_staff">Planning Staff</option>
+          <option value="health_steward">Health Steward</option>
+        </select>
+      </div>
+    </div>
+    
+    <div id="catalogGrid" class="grid">
+      <div class="loading">Loading catalog...</div>
+    </div>
+    
+    <div id="joinResults"></div>
+    
+    <div class="audit-section">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        Audit Log
+        <button class="block-btn" id="blockDemo" style="margin-left:auto;">Demo Blocked Request</button>
+      </h2>
+      <div class="audit-log" id="auditLog">
+        <div class="empty-state">
+          <h3>No activity yet</h3>
+          <p>Audit entries will appear here as requests are made</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let currentRole = 'eng_staff';
+    let datasets = [];
+    let selectedLeftDataset = null;
+    
+    function getHeaders() {
+      return { 'Authorization': `Bearer ${currentRole}` };
+    }
+    
+    function getTierClass(tier) {
+      return `tier-${tier}`;
+    }
+    
+    async function loadCatalog() {
+      const search = document.getElementById('searchInput').value;
+      let url = `${API_BASE}/catalog`;
+      if (search) url += `?q=${encodeURIComponent(search)}`;
+      
+      try {
+        const res = await fetch(url, { headers: getHeaders() });
+        const data = await res.json();
+        datasets = data.datasets || [];
+        renderCatalog();
+        loadAuditLog();
+      } catch (e) {
+        document.getElementById('catalogGrid').innerHTML = '<div class="empty-state"><h3>Failed to connect to API</h3><p>Make sure the server is running on port 3000</p></div>';
+      }
+    }
+    
+    function renderCatalog() {
+      const grid = document.getElementById('catalogGrid');
+      
+      if (datasets.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><h3>No datasets found</h3><p>Try a different search term</p></div>';
+        return;
+      }
+      
+      grid.innerHTML = datasets.map(ds => `
+        <div class="card" data-id="${ds.dataset_id}">
+          <div class="card-header">
+            <div class="card-title">${ds.name}</div>
+            <span class="tier-badge ${getTierClass(ds.access_tier)}">${ds.access_tier}</span>
+          </div>
+          <div class="card-meta">
+            <span><strong>Dept:</strong> ${ds.owner_dept}</span>
+            <span class="quality-score">
+              <strong>Quality:</strong> ${Math.round(ds.quality_score * 100)}%
+              <div class="quality-bar"><div class="quality-fill" style="width:${ds.quality_score * 100}%"></div></div>
+            </span>
+          </div>
+          <p class="card-description">${getDescription(ds.dataset_id)}</p>
+          <div class="card-meta">
+            <span><strong>Spatial key:</strong> <span class="spatial-key">${ds.spatial_key}</span></span>
+            <span><strong>Fields:</strong> ${ds.fields.length}</span>
+          </div>
+          ${ds.joinable_with && ds.joinable_with.length > 0 ? `
+            <div class="joinable-section">
+              <div class="joinable-title">Can join with:</div>
+              ${ds.joinable_with.map(j => `
+                <div class="joinable-item">
+                  <span class="join-icon">⚡</span>
+                  <span>${j.name}</span>
+                  <small style="color:#8b949e">(via ${j.shared_key})</small>
+                </div>
+              `).join('')}
+            </div>
+            <button class="join-btn" onclick="initiateJoin('${ds.dataset_id}')">
+              Join with Planning Permits
+            </button>
+          ` : '<button class="join-btn" disabled>No joinable datasets</button>'}
+        </div>
+      `).join('');
+    }
+    
+    function getDescription(id) {
+      const descriptions = {
+        'eng-pressure-zones': 'Water distribution system capacity metrics by pressure zone including utilization percentage, pressure readings, and flow rates across Kitchener wards.',
+        'plan-permits-2024': 'Active residential building permits including infill and subdivision projects with unit counts, application dates, and estimated completion timelines.',
+        'health-cases': 'Aggregated communicable disease surveillance data by zone with incidence rates. Contains no PII - only aggregate counts are included.',
+        'transit-stops': 'Grand River Transit stop locations with daily ridership counts and routes serving each station.'
+      };
+      return descriptions[id] || 'Municipal dataset';
+    }
+    
+    async function initiateJoin(leftDatasetId) {
+      const rightDatasetId = leftDatasetId === 'eng-pressure-zones' ? 'plan-permits-2024' : 'eng-pressure-zones';
+      
+      const joinConfig = {
+        left_dataset: leftDatasetId,
+        right_dataset: rightDatasetId,
+        join_key: 'civic_address',
+        left_fields: ['zone', 'capacity_pct'],
+        right_fields: ['permit_type', 'units']
+      };
+      
+      try {
+        const res = await fetch(`${API_BASE}/join`, {
+          method: 'POST',
+          headers: { ...getHeaders(), 'Content-Type': 'application/json' },
+          body: JSON.stringify(joinConfig)
+        });
+        
+        const data = await res.json();
+        renderJoinResult(data);
+        loadAuditLog();
+      } catch (e) {
+        console.error('Join failed:', e);
+      }
+    }
+    
+    function renderJoinResult(data) {
+      const container = document.getElementById('joinResults');
+      
+      if (data.error) {
+        container.innerHTML = `
+          <div class="join-result" style="border-color:#f85149;">
+            <h3 style="color:#f85149;">❌ Join Failed</h3>
+            <p>${data.message}</p>
+            <p>Your role: <strong>${data.your_role}</strong></p>
+          </div>
+        `;
+        return;
+      }
+      
+      const results = data.results || [];
+      container.innerHTML = `
+        <div class="join-result">
+          <h3>✓ Join Successful</h3>
+          <p><strong>${data.left_dataset}</strong> + <strong>${data.right_dataset}</strong> on <span class="spatial-key">${data.join_key}</span></p>
+          <p>Found <strong>${data.result_count}</strong> matching records</p>
+          <table>
+            <thead>
+              <tr>
+                <th>${data.join_key}</th>
+                <th>Zone</th>
+                <th>Capacity %</th>
+                <th>Permit Type</th>
+                <th>Units</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${results.slice(0, 10).map(r => `
+                <tr>
+                  <td>${r[data.join_key]}</td>
+                  <td>${r.left_zone || '-'}</td>
+                  <td style="color:${r.left_capacity_pct >= 85 ? '#f85149' : r.left_capacity_pct >= 70 ? '#ffaa00' : '#238636'}">${r.left_capacity_pct || '-'}</td>
+                  <td>${r.right_permit_type || '-'}</td>
+                  <td>${r.right_units || '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          ${results.length > 10 ? `<p style="margin-top:10px;color:#8b949e;">Showing 10 of ${results.length} results</p>` : ''}
+        </div>
+      `;
+    }
+    
+    async function loadAuditLog() {
+      try {
+        const res = await fetch(`${API_BASE}/audit?limit=20`, { headers: getHeaders() });
+        const data = await res.json();
+        renderAuditLog(data.logs || []);
+      } catch (e) {
+        console.error('Failed to load audit log:', e);
+      }
+    }
+    
+    function renderAuditLog(logs) {
+      const container = document.getElementById('auditLog');
+      
+      if (logs.length === 0) {
+        container.innerHTML = '<div class="empty-state"><h3>No activity yet</h3><p>Audit entries will appear here</p></div>';
+        return;
+      }
+      
+      container.innerHTML = logs.reverse().map(log => `
+        <div class="audit-entry">
+          <span class="audit-time">${new Date(log.timestamp).toLocaleString()}</span>
+          <span class="audit-action ${log.action}">${log.action.toUpperCase()}</span>
+          <span class="audit-details">
+            ${log.role !== 'none' ? `Role: ${log.role}` : ''}
+            ${log.path ? ` | Path: ${log.path}` : ''}
+            ${log.result_count !== undefined ? ` | Results: ${log.result_count}` : ''}
+            ${log.reason ? ` | Reason: ${log.reason}` : ''}
+            ${log.left_dataset ? ` | Join: ${log.left_dataset} ↔ ${log.right_dataset}` : ''}
+          </span>
+        </div>
+      `).join('');
+    }
+    
+    document.getElementById('searchInput').addEventListener('input', debounce(loadCatalog, 300));
+    
+    document.getElementById('roleSelect').addEventListener('change', (e) => {
+      currentRole = e.target.value;
+      loadCatalog();
+    });
+    
+    document.getElementById('blockDemo').addEventListener('click', async () => {
+      const originalRole = currentRole;
+      currentRole = 'public';
+      
+      await fetch(`${API_BASE}/datasets/health-cases/query?aggregate=count`, { 
+        headers: { 'Authorization': `Bearer public` }
+      });
+      
+      currentRole = originalRole;
+      document.getElementById('roleSelect').value = originalRole;
+      
+      loadCatalog();
+    });
+    
+    function debounce(fn, ms) {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), ms);
+      };
+    }
+    
+    loadCatalog();
+  </script>
+</body>
+</html>
