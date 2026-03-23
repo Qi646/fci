@@ -9,10 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@deck.gl/aggregation-layers": "^9.2.11",
+    "@deck.gl/core": "^9.2.11",
+    "@deck.gl/layers": "^9.2.11",
+    "@deck.gl/mapbox": "^9.2.11",
+    "@deck.gl/react": "^9.2.11",
+    "framer-motion": "^12.38.0",
+    "geist": "^1.7.0",
     "maplibre-gl": "5.9.0",
     "next": "15.5.14",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "reactflow": "^11.11.4"
   },
   "devDependencies": {
     "@types/node": "24.5.2",

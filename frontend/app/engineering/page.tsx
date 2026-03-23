@@ -149,7 +149,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         <article className="card">
           <div className="panelHeading">
             <h2>Basemap</h2>
-            <span className="panelMeta">MapLibre / real coordinates</span>
+            <span className="panelMeta">MapLibre Dark Matter / live coordinates</span>
           </div>
           <EngineeringMap
             zones={zones.map((zone) => ({
@@ -161,6 +161,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             }))}
             permits={permits.map((permit) => ({
               permit_id: String(permit.permit_id),
+              permit_type: String(permit.permit_type ?? "unknown"),
               units: Number(permit.units ?? 0),
               lat: Number(permit.lat ?? 0),
               lng: Number(permit.lng ?? 0),

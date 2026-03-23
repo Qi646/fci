@@ -138,7 +138,7 @@ export default async function PlanningPage({ searchParams }: PageProps) {
             <span className="panelMeta">2024 permit pipeline</span>
           </div>
           <svg viewBox="0 0 320 220" className="chartSvg" aria-label="Planning trend chart">
-            <rect x="44" y="20" width="244" height="148" fill="#fafafa" stroke="#d7d7d2" />
+            <rect x="44" y="20" width="244" height="148" fill="rgba(255,255,255,0.02)" stroke="rgba(0,212,255,0.1)" />
             {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
               const y = 168 - ratio * 148;
               const label = Math.round(maxUnits * ratio);

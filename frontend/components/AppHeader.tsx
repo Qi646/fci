@@ -93,6 +93,12 @@ export default function AppHeader() {
           <Link href={buildHref("/")} className="appNavLink">
             Views
           </Link>
+          <Link href={buildHref("/topology")} className="appNavLink">
+            Topology
+          </Link>
+          <Link href={buildHref("/catalog")} className="appNavLink">
+            Catalog
+          </Link>
           <Link href={buildHref("/access")} className="appNavLink">
             Access
           </Link>

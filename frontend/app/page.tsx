@@ -58,6 +58,24 @@ const cards = [
     focus: "High-risk wards and overlap",
     preview: "previewOverlay",
   },
+  {
+    href: "/topology",
+    eyebrow: "Data mesh",
+    title: "Federation topology",
+    tag: "Live / data flow",
+    blurb: "Departments as nodes, data connections as edges. Queries animate in real time.",
+    focus: "Cross-department data flow",
+    preview: "previewTransit",
+  },
+  {
+    href: "/catalog",
+    eyebrow: "Data catalog",
+    title: "Browse and join datasets",
+    tag: "Catalog / join engine",
+    blurb: "Search all registered datasets, fire cross-department joins, and inspect the audit trail.",
+    focus: "Dataset discovery and integration",
+    preview: "previewMap",
+  },
 ];
 
 type PageProps = {
@@ -113,7 +131,7 @@ export default async function Home({ searchParams }: PageProps) {
         ]}
       />
 
-      <section className="launcherGrid">
+      <section className="launcherGrid stagger">
         {cards.map((card) => (
           <Link key={card.href} href={`${card.href}?${activeParams.toString()}`} className="launcherCard">
             <div className="launcherCardMain">

@@ -102,7 +102,7 @@ export default async function ClimatePage({ searchParams }: PageProps) {
             <span className="panelMeta">flood vs heat</span>
           </div>
           <svg viewBox="0 0 320 220" className="chartSvg" aria-label="Climate risk matrix">
-            <rect x="44" y="20" width="244" height="148" fill="#fafafa" stroke="#d7d7d2" />
+            <rect x="44" y="20" width="244" height="148" fill="rgba(255,255,255,0.02)" stroke="rgba(0,212,255,0.1)" />
             {[0, 20, 40, 60, 80].map((tick) => {
               const x = 44 + (tick / 80) * 244;
               const y = 168 - (tick / 80) * 148;
@@ -127,7 +127,7 @@ export default async function ClimatePage({ searchParams }: PageProps) {
               const y = 168 - (heat / 80) * 148;
               return (
                 <g key={String(overlay.overlay_id)}>
-                  <circle cx={x} cy={y} r={6 + air / 12} fill="rgba(180, 35, 24, 0.14)" stroke="#b42318" />
+                  <circle cx={x} cy={y} r={6 + air / 12} fill="rgba(255, 51, 102, 0.15)" stroke="#FF3366" strokeWidth={1.5} />
                   <text x={x} y={y + 3} textAnchor="middle" className="svgLabel">
                     {String(overlay.ward).replace("Ward ", "W")}
                   </text>

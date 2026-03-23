@@ -1,19 +1,19 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Suspense } from "react";
 import AppHeader from "../components/AppHeader";
 
-const bodyFont = IBM_Plex_Sans({
+const bodyFont = Inter({
   subsets: ["latin"],
   variable: "--font-body",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const monoFont = IBM_Plex_Mono({
+const monoFont = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  weight: ["500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

@@ -109,7 +109,7 @@ export default async function TransitPage({ searchParams }: PageProps) {
             <span className="panelMeta">lat/lng projected</span>
           </div>
           <svg viewBox="0 0 320 220" className="chartSvg" aria-label="Transit spatial plot">
-            <rect x="36" y="20" width="252" height="162" fill="#fafafa" stroke="#d7d7d2" />
+            <rect x="36" y="20" width="252" height="162" fill="rgba(255,255,255,0.02)" stroke="rgba(0,212,255,0.1)" />
             {[0, 1, 2, 3].map((idx) => {
               const y = 20 + idx * 54;
               return <line key={`gy-${idx}`} x1="36" y1={y} x2="288" y2={y} className="gridLine" />;
