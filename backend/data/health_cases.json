@@ -5,8 +5,15 @@
   "owner_department": "public_health",
   "classification": "health_sensitive",
   "share_mode": "approved_purpose_access",
-  "allowed_consumer_departments": ["public_health", "planning"],
-  "permitted_use_cases": ["outbreak_monitoring", "service_planning"],
+  "allowed_consumer_departments": [
+    "public_health",
+    "planning"
+  ],
+  "permitted_use_cases": [
+    "outbreak_monitoring",
+    "service_planning",
+    "governance_oversight"
+  ],
   "access_clearance_overrides": {
     "aggregate": "internal"
   },
@@ -16,7 +23,9 @@
   "row_filter_rules": [
     {
       "consumer_department": "planning",
-      "purposes": ["service_planning"],
+      "purposes": [
+        "service_planning"
+      ],
       "condition": "aggregate_only"
     }
   ],
@@ -27,7 +36,7 @@
   "access_tier": "restricted",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",
-  "quality_score": 86,
+  "quality_score": 0.86,
   "fields": [
     "record_id",
     "zone_id",
@@ -40,33 +49,1803 @@
   ],
   "records": [
     {
-      "record_id": "HEALTH-2024-W44-ZONE002",
+      "record_id": "HEALTH-2024-W33-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-12",
+      "case_count": 8,
+      "case_type": "respiratory",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-12",
+      "case_count": 4,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-12",
+      "case_count": 3,
+      "case_type": "dermatological",
+      "rate_per_1000": 0.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-002-RESP",
       "zone_id": "ENG-ZONE-002",
       "ward": "Ward 6",
-      "week_start": "2024-10-28",
+      "week_start": "2024-08-12",
+      "case_count": 28,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-12",
+      "case_count": 13,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-12",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-12",
       "case_count": 14,
       "case_type": "respiratory",
       "rate_per_1000": 3.2,
       "alert": false
     },
     {
-      "record_id": "HEALTH-2024-W44-ZONE004",
+      "record_id": "HEALTH-2024-W33-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-12",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-12",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-12",
+      "case_count": 25,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-12",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-12",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-12",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-12",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W33-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-12",
+      "case_count": 4,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-19",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-19",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-19",
+      "case_count": 5,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-19",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-19",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-19",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-19",
+      "case_count": 17,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-19",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-19",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-19",
+      "case_count": 27,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-19",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-19",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-19",
+      "case_count": 12,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-19",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W34-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-19",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-26",
+      "case_count": 11,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-26",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-08-26",
+      "case_count": 7,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-26",
+      "case_count": 33,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-26",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-08-26",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-26",
+      "case_count": 18,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-26",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-08-26",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-26",
+      "case_count": 29,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-26",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-08-26",
+      "case_count": 14,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-26",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-26",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W35-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-08-26",
+      "case_count": 8,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-02",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-02",
+      "case_count": 10,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-02",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-02",
+      "case_count": 35,
+      "case_type": "respiratory",
+      "rate_per_1000": 7.3,
+      "alert": true
+    },
+    {
+      "record_id": "HEALTH-2024-W36-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-02",
+      "case_count": 20,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 4.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-02",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-02",
+      "case_count": 21,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-02",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-02",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-02",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-02",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-02",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-02",
+      "case_count": 16,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-02",
+      "case_count": 11,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W36-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-02",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-09",
+      "case_count": 8,
+      "case_type": "respiratory",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-09",
+      "case_count": 4,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-09",
+      "case_count": 3,
+      "case_type": "dermatological",
+      "rate_per_1000": 0.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-09",
+      "case_count": 28,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-09",
+      "case_count": 13,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-09",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-09",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-09",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-09",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-09",
+      "case_count": 25,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-09",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-09",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-09",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-09",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W37-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-09",
+      "case_count": 4,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-16",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-16",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-16",
+      "case_count": 5,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-16",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-16",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-16",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-16",
+      "case_count": 17,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-16",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-16",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-16",
+      "case_count": 27,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-16",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-16",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-16",
+      "case_count": 12,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-16",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W38-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-16",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-23",
+      "case_count": 11,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-23",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-23",
+      "case_count": 7,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-23",
+      "case_count": 33,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-23",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-23",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-23",
+      "case_count": 18,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-23",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-23",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-23",
+      "case_count": 29,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-23",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-23",
+      "case_count": 14,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-23",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-23",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W39-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-23",
+      "case_count": 8,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-30",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-30",
+      "case_count": 10,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-09-30",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-30",
+      "case_count": 35,
+      "case_type": "respiratory",
+      "rate_per_1000": 7.3,
+      "alert": true
+    },
+    {
+      "record_id": "HEALTH-2024-W40-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-30",
+      "case_count": 20,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 4.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-09-30",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-30",
+      "case_count": 21,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-30",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-09-30",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-30",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-30",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-09-30",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-30",
+      "case_count": 16,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-30",
+      "case_count": 11,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W40-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-09-30",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-07",
+      "case_count": 8,
+      "case_type": "respiratory",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-07",
+      "case_count": 4,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-07",
+      "case_count": 3,
+      "case_type": "dermatological",
+      "rate_per_1000": 0.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-07",
+      "case_count": 28,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-07",
+      "case_count": 13,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-07",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-07",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-07",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-07",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-07",
+      "case_count": 25,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-07",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-07",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-07",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-07",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W41-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-07",
+      "case_count": 4,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-14",
+      "case_count": 10,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-14",
+      "case_count": 6,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-14",
+      "case_count": 5,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-14",
+      "case_count": 31,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-14",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-14",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-14",
+      "case_count": 17,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-14",
+      "case_count": 12,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-14",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-14",
+      "case_count": 27,
+      "case_type": "respiratory",
+      "rate_per_1000": 5.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-14",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-14",
+      "case_count": 12,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-14",
+      "case_count": 12,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-14",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W42-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-14",
+      "case_count": 6,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-21",
+      "case_count": 11,
+      "case_type": "respiratory",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-21",
+      "case_count": 8,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 1.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-21",
+      "case_count": 7,
+      "case_type": "dermatological",
+      "rate_per_1000": 1.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-21",
+      "case_count": 33,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-21",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.7,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-21",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-21",
+      "case_count": 18,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-21",
+      "case_count": 14,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-21",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-004-RESP",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-21",
+      "case_count": 29,
+      "case_type": "respiratory",
+      "rate_per_1000": 6.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-21",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-21",
+      "case_count": 14,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-21",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-21",
+      "case_count": 9,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W43-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-21",
+      "case_count": 8,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.0,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-001-RESP",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-28",
+      "case_count": 14,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-001-GAST",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-28",
+      "case_count": 10,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.4,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-001-DERM",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "week_start": "2024-10-28",
+      "case_count": 9,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.1,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-002-RESP",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-28",
+      "case_count": 35,
+      "case_type": "respiratory",
+      "rate_per_1000": 7.3,
+      "alert": true
+    },
+    {
+      "record_id": "HEALTH-2024-W44-002-GAST",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-28",
+      "case_count": 20,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 4.2,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-002-DERM",
+      "zone_id": "ENG-ZONE-002",
+      "ward": "Ward 6",
+      "week_start": "2024-10-28",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.3,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-003-RESP",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-28",
+      "case_count": 21,
+      "case_type": "respiratory",
+      "rate_per_1000": 4.6,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-003-GAST",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-28",
+      "case_count": 16,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-003-DERM",
+      "zone_id": "ENG-ZONE-003",
+      "ward": "Ward 4",
+      "week_start": "2024-10-28",
+      "case_count": 13,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-004-RESP",
       "zone_id": "ENG-ZONE-004",
       "ward": "Ward 9",
       "week_start": "2024-10-28",
       "case_count": 31,
       "case_type": "respiratory",
-      "rate_per_1000": 7.1,
-      "alert": true
+      "rate_per_1000": 6.7,
+      "alert": false
     },
     {
-      "record_id": "HEALTH-2024-W45-ZONE003",
-      "zone_id": "ENG-ZONE-003",
-      "ward": "Ward 4",
-      "week_start": "2024-11-04",
+      "record_id": "HEALTH-2024-W44-004-GAST",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-28",
+      "case_count": 18,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-004-DERM",
+      "zone_id": "ENG-ZONE-004",
+      "ward": "Ward 9",
+      "week_start": "2024-10-28",
+      "case_count": 16,
+      "case_type": "dermatological",
+      "rate_per_1000": 3.5,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-005-RESP",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-28",
+      "case_count": 16,
+      "case_type": "respiratory",
+      "rate_per_1000": 3.9,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-005-GAST",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-28",
       "case_count": 11,
-      "case_type": "gastro",
-      "rate_per_1000": 2.4,
+      "case_type": "gastrointestinal",
+      "rate_per_1000": 2.8,
+      "alert": false
+    },
+    {
+      "record_id": "HEALTH-2024-W44-005-DERM",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "week_start": "2024-10-28",
+      "case_count": 10,
+      "case_type": "dermatological",
+      "rate_per_1000": 2.5,
       "alert": false
     }
   ]

@@ -1,0 +1,210 @@
+{
+  "dataset_id": "scorecard-metrics",
+  "name": "Vision One Million Scorecard",
+  "owner_department": "city_manager",
+  "classification": "internal",
+  "share_mode": "municipal_internal",
+  "spatial_key": "indicator_id",
+  "last_updated": "2026-03-01T00:00:00Z",
+  "quality_score": 0.85,
+  "fields": [
+    "indicator_id",
+    "pillar",
+    "indicator_name",
+    "current_value",
+    "target_value",
+    "unit",
+    "status",
+    "source_dataset_id",
+    "last_computed"
+  ],
+  "pii_fields": [],
+  "field_mask_rules": {},
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
+  "allowed_consumer_departments": [],
+  "permitted_use_cases": [
+    "governance_oversight"
+  ],
+  "records": [
+    {
+      "indicator_id": "housing-permits-ytd",
+      "pillar": "housing",
+      "indicator_name": "Permits issued (YTD)",
+      "current_value": 40,
+      "target_value": 70,
+      "unit": "count",
+      "status": "at-risk",
+      "source_dataset_id": "plan-permits-2024",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "housing-infill-share",
+      "pillar": "housing",
+      "indicator_name": "Infill share",
+      "current_value": 0.5,
+      "target_value": 0.5,
+      "unit": "ratio",
+      "status": "on-track",
+      "source_dataset_id": "plan-permits-2024",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "housing-water-headroom",
+      "pillar": "housing",
+      "indicator_name": "Water capacity headroom",
+      "current_value": -0.067,
+      "target_value": 0.2,
+      "unit": "ratio",
+      "status": "behind",
+      "source_dataset_id": "eng-pressure-zones",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "housing-zoned-infill-parcels",
+      "pillar": "housing",
+      "indicator_name": "Parcels zoned for infill",
+      "current_value": 23,
+      "target_value": 18,
+      "unit": "count",
+      "status": "on-track",
+      "source_dataset_id": "zoning-districts",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "transport-ridership-growth",
+      "pillar": "transportation",
+      "indicator_name": "Transit ridership growth",
+      "current_value": 0.072,
+      "target_value": 0.1,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "transit-stops",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "transport-stops-critical-zones",
+      "pillar": "transportation",
+      "indicator_name": "Stops in critical growth zones",
+      "current_value": 6,
+      "target_value": 8,
+      "unit": "count",
+      "status": "on-track",
+      "source_dataset_id": "transit-stops",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "transport-active-corridors",
+      "pillar": "transportation",
+      "indicator_name": "High-frequency corridor coverage",
+      "current_value": 0.61,
+      "target_value": 0.75,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "transit-stops",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "health-alert-zones",
+      "pillar": "healthcare",
+      "indicator_name": "Respiratory alert zones",
+      "current_value": 1,
+      "target_value": 0,
+      "unit": "count",
+      "status": "behind",
+      "source_dataset_id": "health-cases",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "health-primary-care-wait",
+      "pillar": "healthcare",
+      "indicator_name": "Primary care wait time",
+      "current_value": 18,
+      "target_value": 10,
+      "unit": "days",
+      "status": "behind",
+      "source_dataset_id": "health-cases",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "health-service-demand",
+      "pillar": "healthcare",
+      "indicator_name": "Health-linked service demand stability",
+      "current_value": 0.82,
+      "target_value": 0.9,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "social-services-demographics",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "employment-construction-pipeline",
+      "pillar": "employment",
+      "indicator_name": "Construction jobs supported",
+      "current_value": 1250,
+      "target_value": 1800,
+      "unit": "count",
+      "status": "at-risk",
+      "source_dataset_id": "plan-permits-2024",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "employment-risk-exposure",
+      "pillar": "employment",
+      "indicator_name": "Jobs exposed to capacity freeze",
+      "current_value": 25000,
+      "target_value": 0,
+      "unit": "count",
+      "status": "behind",
+      "source_dataset_id": "eng-pressure-zones",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "employment-transit-access",
+      "pillar": "employment",
+      "indicator_name": "Employment lands with strong transit access",
+      "current_value": 0.68,
+      "target_value": 0.8,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "transit-stops",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "placemaking-climate-priority",
+      "pillar": "placemaking",
+      "indicator_name": "Average climate priority score",
+      "current_value": 54.6,
+      "target_value": 35,
+      "unit": "score",
+      "status": "behind",
+      "source_dataset_id": "climate-risk-overlays",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "placemaking-mixed-use-coverage",
+      "pillar": "placemaking",
+      "indicator_name": "Mixed-use zoning coverage",
+      "current_value": 0.44,
+      "target_value": 0.55,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "zoning-districts",
+      "last_computed": "2026-03-01T00:00:00Z"
+    },
+    {
+      "indicator_id": "placemaking-household-support",
+      "pillar": "placemaking",
+      "indicator_name": "Neighbourhood support readiness",
+      "current_value": 0.79,
+      "target_value": 0.88,
+      "unit": "ratio",
+      "status": "at-risk",
+      "source_dataset_id": "social-services-demographics",
+      "last_computed": "2026-03-01T00:00:00Z"
+    }
+  ]
+}

@@ -5,8 +5,18 @@
   "owner_department": "engineering",
   "classification": "internal",
   "share_mode": "approved_purpose_access",
-  "allowed_consumer_departments": ["engineering", "planning", "climate"],
-  "permitted_use_cases": ["infrastructure_operations", "capital_planning", "service_planning", "climate_resilience"],
+  "allowed_consumer_departments": [
+    "engineering",
+    "planning",
+    "climate"
+  ],
+  "permitted_use_cases": [
+    "infrastructure_operations",
+    "capital_planning",
+    "service_planning",
+    "climate_resilience",
+    "governance_oversight"
+  ],
   "field_mask_rules": {
     "default": []
   },
@@ -18,7 +28,7 @@
   "access_tier": "internal",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",
-  "quality_score": 92,
+  "quality_score": 0.92,
   "fields": [
     "zone_id",
     "zone_name",
@@ -34,7 +44,10 @@
     {
       "zone_id": "ENG-ZONE-001",
       "zone_name": "North Corridor",
-      "wards": ["Ward 1", "Ward 2"],
+      "wards": [
+        "Ward 1",
+        "Ward 2"
+      ],
       "capacity_pct": 62,
       "max_capacity_units": 4200,
       "current_load_units": 2604,
@@ -45,7 +58,9 @@
     {
       "zone_id": "ENG-ZONE-002",
       "zone_name": "Bridgeport",
-      "wards": ["Ward 6"],
+      "wards": [
+        "Ward 6"
+      ],
       "capacity_pct": 97,
       "max_capacity_units": 1800,
       "current_load_units": 1746,
@@ -56,7 +71,10 @@
     {
       "zone_id": "ENG-ZONE-003",
       "zone_name": "Central Grid",
-      "wards": ["Ward 4", "Ward 5"],
+      "wards": [
+        "Ward 4",
+        "Ward 5"
+      ],
       "capacity_pct": 81,
       "max_capacity_units": 3100,
       "current_load_units": 2511,
@@ -67,7 +85,9 @@
     {
       "zone_id": "ENG-ZONE-004",
       "zone_name": "Uptown East",
-      "wards": ["Ward 9"],
+      "wards": [
+        "Ward 9"
+      ],
       "capacity_pct": 93,
       "max_capacity_units": 2200,
       "current_load_units": 2046,
@@ -78,7 +98,10 @@
     {
       "zone_id": "ENG-ZONE-005",
       "zone_name": "South Basin",
-      "wards": ["Ward 7", "Ward 8"],
+      "wards": [
+        "Ward 7",
+        "Ward 8"
+      ],
       "capacity_pct": 55,
       "max_capacity_units": 2800,
       "current_load_units": 1540,

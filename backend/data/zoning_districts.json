@@ -1,0 +1,402 @@
+{
+  "dataset_id": "zoning-districts",
+  "name": "Zoning Districts",
+  "owner_dept": "Planning",
+  "owner_department": "planning",
+  "classification": "open",
+  "share_mode": "open",
+  "spatial_key": "parcel_id",
+  "last_updated": "2026-01-15T00:00:00Z",
+  "quality_score": 0.91,
+  "fields": [
+    "parcel_id",
+    "ward",
+    "zone_id",
+    "zoning_class",
+    "permitted_uses",
+    "max_height_m",
+    "max_density_units_per_ha",
+    "allows_infill",
+    "lat",
+    "lng"
+  ],
+  "pii_fields": [],
+  "field_mask_rules": {},
+  "row_filter_rules": [],
+  "join_policy": {
+    "allow_cross_department_join": true,
+    "allow_raw_row_output": true
+  },
+  "allowed_consumer_departments": [
+    "public"
+  ],
+  "permitted_use_cases": [
+    "governance_oversight"
+  ],
+  "records": [
+    {
+      "parcel_id": "KIT-00421",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4493,
+      "lng": -80.4943
+    },
+    {
+      "parcel_id": "WAT-00422",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4593,
+      "lng": -80.5293
+    },
+    {
+      "parcel_id": "WAT-00423",
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004",
+      "zoning_class": "C1",
+      "permitted_uses": [
+        "mixed_use",
+        "retail",
+        "residential"
+      ],
+      "max_height_m": 24,
+      "max_density_units_per_ha": 160,
+      "allows_infill": true,
+      "lat": 43.4643,
+      "lng": -80.4828
+    },
+    {
+      "parcel_id": "KIT-00424",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "MU-1",
+      "permitted_uses": [
+        "mixed_use",
+        "midrise_residential"
+      ],
+      "max_height_m": 30,
+      "max_density_units_per_ha": 220,
+      "allows_infill": true,
+      "lat": 43.4583,
+      "lng": -80.5068
+    },
+    {
+      "parcel_id": "KIT-00425",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4525,
+      "lng": -80.5018
+    },
+    {
+      "parcel_id": "KIT-00426",
+      "ward": "Ward 1",
+      "zone_id": "ENG-ZONE-001",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4787,
+      "lng": -80.5168
+    },
+    {
+      "parcel_id": "KIT-00427",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "C1",
+      "permitted_uses": [
+        "mixed_use",
+        "retail",
+        "residential"
+      ],
+      "max_height_m": 24,
+      "max_density_units_per_ha": 160,
+      "allows_infill": true,
+      "lat": 43.4619,
+      "lng": -80.5098
+    },
+    {
+      "parcel_id": "KIT-00428",
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4409,
+      "lng": -80.5038
+    },
+    {
+      "parcel_id": "KIT-00429",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4473,
+      "lng": -80.5018
+    },
+    {
+      "parcel_id": "KIT-00430",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4558,
+      "lng": -80.5128
+    },
+    {
+      "parcel_id": "WAT-00431",
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004",
+      "zoning_class": "C1",
+      "permitted_uses": [
+        "mixed_use",
+        "retail",
+        "residential"
+      ],
+      "max_height_m": 24,
+      "max_density_units_per_ha": 160,
+      "allows_infill": true,
+      "lat": 43.4643,
+      "lng": -80.4828
+    },
+    {
+      "parcel_id": "KIT-00432",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "MU-2",
+      "permitted_uses": [
+        "mixed_use",
+        "highrise_residential"
+      ],
+      "max_height_m": 38,
+      "max_density_units_per_ha": 280,
+      "allows_infill": true,
+      "lat": 43.4513,
+      "lng": -80.4928
+    },
+    {
+      "parcel_id": "KIT-00433",
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005",
+      "zoning_class": "R1",
+      "permitted_uses": [
+        "single_detached"
+      ],
+      "max_height_m": 11,
+      "max_density_units_per_ha": 28,
+      "allows_infill": false,
+      "lat": 43.4375,
+      "lng": -80.5128
+    },
+    {
+      "parcel_id": "WAT-00434",
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004",
+      "zoning_class": "MU-2",
+      "permitted_uses": [
+        "mixed_use",
+        "highrise_residential"
+      ],
+      "max_height_m": 38,
+      "max_density_units_per_ha": 280,
+      "allows_infill": true,
+      "lat": 43.4677,
+      "lng": -80.4858
+    },
+    {
+      "parcel_id": "KIT-00435",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "C1",
+      "permitted_uses": [
+        "mixed_use",
+        "retail",
+        "residential"
+      ],
+      "max_height_m": 24,
+      "max_density_units_per_ha": 160,
+      "allows_infill": true,
+      "lat": 43.4549,
+      "lng": -80.4958
+    },
+    {
+      "parcel_id": "KIT-00436",
+      "ward": "Ward 1",
+      "zone_id": "ENG-ZONE-001",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4809,
+      "lng": -80.5108
+    },
+    {
+      "parcel_id": "KIT-00437",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4543,
+      "lng": -80.5158
+    },
+    {
+      "parcel_id": "KIT-00438",
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4338,
+      "lng": -80.5098
+    },
+    {
+      "parcel_id": "WAT-00439",
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004",
+      "zoning_class": "C1",
+      "permitted_uses": [
+        "mixed_use",
+        "retail",
+        "residential"
+      ],
+      "max_height_m": 24,
+      "max_density_units_per_ha": 160,
+      "allows_infill": true,
+      "lat": 43.4643,
+      "lng": -80.4828
+    },
+    {
+      "parcel_id": "KIT-00440",
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003",
+      "zoning_class": "MU-1",
+      "permitted_uses": [
+        "mixed_use",
+        "midrise_residential"
+      ],
+      "max_height_m": 30,
+      "max_density_units_per_ha": 220,
+      "allows_infill": true,
+      "lat": 43.4583,
+      "lng": -80.5068
+    },
+    {
+      "parcel_id": "KIT-00441",
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4525,
+      "lng": -80.5018
+    },
+    {
+      "parcel_id": "KIT-00442",
+      "ward": "Ward 1",
+      "zone_id": "ENG-ZONE-001",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4787,
+      "lng": -80.5168
+    },
+    {
+      "parcel_id": "KIT-00443",
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005",
+      "zoning_class": "R4",
+      "permitted_uses": [
+        "townhouse",
+        "lowrise_apartment"
+      ],
+      "max_height_m": 18,
+      "max_density_units_per_ha": 110,
+      "allows_infill": true,
+      "lat": 43.4399,
+      "lng": -80.5068
+    },
+    {
+      "parcel_id": "KIT-00444",
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005",
+      "zoning_class": "R2",
+      "permitted_uses": [
+        "single_detached",
+        "semi_detached"
+      ],
+      "max_height_m": 12,
+      "max_density_units_per_ha": 42,
+      "allows_infill": true,
+      "lat": 43.4409,
+      "lng": -80.5038
+    }
+  ]
+}

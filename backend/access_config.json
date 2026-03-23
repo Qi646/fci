@@ -75,5 +75,27 @@
     ],
     "default_delivery": "full_detail",
     "viewer_note": "Open environmental risk layer suitable for public use."
+  },
+  {
+    "dataset_id": "zoning-districts",
+    "dataset_name": "Zoning Districts",
+    "owner_department": "planning",
+    "classification": "open",
+    "sharing_policy": "public",
+    "allowed_departments": [
+      "public"
+    ],
+    "default_delivery": "full_detail",
+    "viewer_note": "Open parcel-level zoning rules for infill and land-use compatibility analysis."
+  },
+  {
+    "dataset_id": "scorecard-metrics",
+    "dataset_name": "Vision One Million Scorecard",
+    "owner_department": "city_manager",
+    "classification": "internal",
+    "sharing_policy": "municipal_internal",
+    "allowed_departments": [],
+    "default_delivery": "full_detail",
+    "viewer_note": "Executive scorecard indicators synthesized for municipal readiness tracking."
   }
 ]

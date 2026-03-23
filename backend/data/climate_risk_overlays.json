@@ -6,7 +6,12 @@
   "classification": "open",
   "share_mode": "open",
   "allowed_consumer_departments": [],
-  "permitted_use_cases": ["public_information", "climate_resilience", "service_planning"],
+  "permitted_use_cases": [
+    "public_information",
+    "climate_resilience",
+    "service_planning",
+    "governance_oversight"
+  ],
   "field_mask_rules": {
     "default": []
   },
@@ -18,7 +23,7 @@
   "access_tier": "open",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",
-  "quality_score": 84,
+  "quality_score": 0.84,
   "fields": [
     "overlay_id",
     "zone_id",
@@ -32,6 +37,16 @@
   "records": [
     {
       "overlay_id": "CLIMATE-001",
+      "zone_id": "ENG-ZONE-001",
+      "ward": "Ward 1",
+      "flood_risk": 39,
+      "heat_risk": 44,
+      "air_quality_risk": 36,
+      "priority_score": 41,
+      "recommended_action": "Protect low-lying corridors and expand permeable surfaces."
+    },
+    {
+      "overlay_id": "CLIMATE-002",
       "zone_id": "ENG-ZONE-002",
       "ward": "Ward 6",
       "flood_risk": 73,
@@ -41,7 +56,7 @@
       "recommended_action": "Upgrade stormwater capacity near dense infill corridors."
     },
     {
-      "overlay_id": "CLIMATE-002",
+      "overlay_id": "CLIMATE-003",
       "zone_id": "ENG-ZONE-003",
       "ward": "Ward 4",
       "flood_risk": 41,
@@ -51,7 +66,7 @@
       "recommended_action": "Add urban tree canopy and cooling infrastructure."
     },
     {
-      "overlay_id": "CLIMATE-003",
+      "overlay_id": "CLIMATE-004",
       "zone_id": "ENG-ZONE-004",
       "ward": "Ward 9",
       "flood_risk": 62,
@@ -59,6 +74,16 @@
       "air_quality_risk": 67,
       "priority_score": 67,
       "recommended_action": "Prioritize mixed mitigation around major transit corridors."
+    },
+    {
+      "overlay_id": "CLIMATE-005",
+      "zone_id": "ENG-ZONE-005",
+      "ward": "Ward 8",
+      "flood_risk": 48,
+      "heat_risk": 52,
+      "air_quality_risk": 43,
+      "priority_score": 48,
+      "recommended_action": "Pair cooling centres with neighbourhood-scale drainage upgrades."
     }
   ]
 }

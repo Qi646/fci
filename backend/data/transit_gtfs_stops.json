@@ -6,7 +6,12 @@
   "classification": "open",
   "share_mode": "open",
   "allowed_consumer_departments": [],
-  "permitted_use_cases": ["public_information", "service_planning", "operations"],
+  "permitted_use_cases": [
+    "public_information",
+    "service_planning",
+    "operations",
+    "governance_oversight"
+  ],
   "field_mask_rules": {
     "default": []
   },
@@ -18,7 +23,7 @@
   "access_tier": "open",
   "spatial_key": "zone_id",
   "last_updated": "2026-03-22T09:00:00Z",
-  "quality_score": 94,
+  "quality_score": 0.94,
   "fields": [
     "stop_id",
     "stop_name",
@@ -34,37 +39,204 @@
   "records": [
     {
       "stop_id": "KW-STOP-001",
+      "stop_name": "Victoria and River",
+      "civic_address": "110 Victoria St N, Kitchener",
+      "parcel_id": "KIT-STOP-001",
+      "lat": 43.4782,
+      "lng": -80.5108,
+      "routes": [
+        "Route 20"
+      ],
+      "weekly_boardings": 1580,
+      "ward": "Ward 1",
+      "zone_id": "ENG-ZONE-001"
+    },
+    {
+      "stop_id": "KW-STOP-002",
+      "stop_name": "Frederick and Duke",
+      "civic_address": "425 Frederick St, Kitchener",
+      "parcel_id": "KIT-STOP-002",
+      "lat": 43.4728,
+      "lng": -80.5112,
+      "routes": [
+        "Route 7",
+        "Route 20"
+      ],
+      "weekly_boardings": 2140,
+      "ward": "Ward 1",
+      "zone_id": "ENG-ZONE-001"
+    },
+    {
+      "stop_id": "KW-STOP-003",
       "stop_name": "King and Victoria",
       "civic_address": "1 King St W, Kitchener",
-      "parcel_id": "KIT-STOP-001",
+      "parcel_id": "KIT-STOP-003",
       "lat": 43.451,
       "lng": -80.493,
-      "routes": ["iXpress 200", "Route 7"],
+      "routes": [
+        "iXpress 200",
+        "Route 7"
+      ],
       "weekly_boardings": 4820,
       "ward": "Ward 6",
       "zone_id": "ENG-ZONE-002"
     },
     {
-      "stop_id": "KW-STOP-002",
+      "stop_id": "KW-STOP-004",
+      "stop_name": "Bridgeport and Weber",
+      "civic_address": "390 Bridgeport Rd E, Kitchener",
+      "parcel_id": "KIT-STOP-004",
+      "lat": 43.4541,
+      "lng": -80.4885,
+      "routes": [
+        "Route 8",
+        "Route 20"
+      ],
+      "weekly_boardings": 2680,
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002"
+    },
+    {
+      "stop_id": "KW-STOP-005",
+      "stop_name": "Lancaster and Wellington",
+      "civic_address": "700 Lancaster St E, Kitchener",
+      "parcel_id": "KIT-STOP-005",
+      "lat": 43.4568,
+      "lng": -80.4978,
+      "routes": [
+        "Route 7"
+      ],
+      "weekly_boardings": 1960,
+      "ward": "Ward 6",
+      "zone_id": "ENG-ZONE-002"
+    },
+    {
+      "stop_id": "KW-STOP-006",
+      "stop_name": "Charles and Benton",
+      "civic_address": "50 Charles St E, Kitchener",
+      "parcel_id": "KIT-STOP-006",
+      "lat": 43.4488,
+      "lng": -80.4922,
+      "routes": [
+        "Route 1"
+      ],
+      "weekly_boardings": 2360,
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003"
+    },
+    {
+      "stop_id": "KW-STOP-007",
+      "stop_name": "Belmont and Glasgow",
+      "civic_address": "720 Belmont Ave W, Kitchener",
+      "parcel_id": "KIT-STOP-007",
+      "lat": 43.4529,
+      "lng": -80.5148,
+      "routes": [
+        "Route 16"
+      ],
+      "weekly_boardings": 1820,
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003"
+    },
+    {
+      "stop_id": "KW-STOP-008",
+      "stop_name": "Highland and Westmount",
+      "civic_address": "875 Highland Rd W, Kitchener",
+      "parcel_id": "KIT-STOP-008",
+      "lat": 43.4475,
+      "lng": -80.5256,
+      "routes": [
+        "Route 12"
+      ],
+      "weekly_boardings": 2240,
+      "ward": "Ward 4",
+      "zone_id": "ENG-ZONE-003"
+    },
+    {
+      "stop_id": "KW-STOP-009",
       "stop_name": "Waterloo Town Square",
       "civic_address": "75 King St S, Waterloo",
-      "parcel_id": "WAT-STOP-002",
+      "parcel_id": "WAT-STOP-009",
       "lat": 43.465,
       "lng": -80.522,
-      "routes": ["iXpress 200", "Route 8"],
+      "routes": [
+        "iXpress 200",
+        "Route 8"
+      ],
       "weekly_boardings": 3910,
       "ward": "Ward 9",
       "zone_id": "ENG-ZONE-004"
     },
     {
-      "stop_id": "KW-STOP-003",
+      "stop_id": "KW-STOP-010",
+      "stop_name": "University and Phillip",
+      "civic_address": "200 University Ave W, Waterloo",
+      "parcel_id": "WAT-STOP-010",
+      "lat": 43.4724,
+      "lng": -80.5425,
+      "routes": [
+        "Route 9",
+        "Route 13"
+      ],
+      "weekly_boardings": 3560,
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004"
+    },
+    {
+      "stop_id": "KW-STOP-011",
+      "stop_name": "King and Columbia",
+      "civic_address": "365 Columbia St W, Waterloo",
+      "parcel_id": "WAT-STOP-011",
+      "lat": 43.4788,
+      "lng": -80.5306,
+      "routes": [
+        "Route 7",
+        "Route 31"
+      ],
+      "weekly_boardings": 2740,
+      "ward": "Ward 9",
+      "zone_id": "ENG-ZONE-004"
+    },
+    {
+      "stop_id": "KW-STOP-012",
       "stop_name": "Ottawa and Strasburg",
       "civic_address": "800 Ottawa St S, Kitchener",
-      "parcel_id": "KIT-STOP-003",
+      "parcel_id": "KIT-STOP-012",
       "lat": 43.419,
       "lng": -80.479,
-      "routes": ["Route 12"],
+      "routes": [
+        "Route 12"
+      ],
       "weekly_boardings": 1480,
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005"
+    },
+    {
+      "stop_id": "KW-STOP-013",
+      "stop_name": "Block Line and Homer Watson",
+      "civic_address": "235 Block Line Rd, Kitchener",
+      "parcel_id": "KIT-STOP-013",
+      "lat": 43.4258,
+      "lng": -80.4668,
+      "routes": [
+        "Route 22"
+      ],
+      "weekly_boardings": 1670,
+      "ward": "Ward 8",
+      "zone_id": "ENG-ZONE-005"
+    },
+    {
+      "stop_id": "KW-STOP-014",
+      "stop_name": "Fischer-Hallman and Ottawa",
+      "civic_address": "1180 Fischer-Hallman Rd, Kitchener",
+      "parcel_id": "KIT-STOP-014",
+      "lat": 43.4307,
+      "lng": -80.5221,
+      "routes": [
+        "Route 12",
+        "Route 33"
+      ],
+      "weekly_boardings": 2010,
       "ward": "Ward 8",
       "zone_id": "ENG-ZONE-005"
     }
