@@ -33,6 +33,12 @@ export type CatalogDataset = {
   access_mode: string;
   masked_fields: string[];
   permitted_use_cases: string[];
+  ui_capabilities: string[];
+  view_support: Array<{
+    view_id: "engineering" | "planning" | "public-health" | "transit" | "social-services" | "climate";
+    status: "native" | "supplemental" | "unsupported";
+    reason: string;
+  }>;
 };
 
 export type CatalogResponse = {

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Suspense } from "react";
 import AppHeader from "../components/AppHeader";
+import AppSidebar from "../components/AppSidebar";
 
 const bodyFont = Inter({
   subsets: ["latin"],
@@ -27,10 +28,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${bodyFont.variable} ${monoFont.variable}`}>
-        <Suspense fallback={null}>
-          <AppHeader />
-        </Suspense>
-        {children}
+        <div className="appShell">
+          <Suspense fallback={null}>
+            <AppHeader />
+          </Suspense>
+          <div className="appShellBody">
+            <Suspense fallback={null}>
+              <AppSidebar />
+            </Suspense>
+            <div className="appContent">{children}</div>
+          </div>
+        </div>
       </body>
     </html>
   );

@@ -65,7 +65,6 @@ export default function CatalogBrowser({ context }: { context: AccessContext }) 
     void load();
   }, [context]);
 
-  // Poll audit log
   useEffect(() => {
     async function poll() {
       try {
@@ -78,8 +77,11 @@ export default function CatalogBrowser({ context }: { context: AccessContext }) 
           const data = (await res.json()) as { entries: AuditEntry[] };
           setAuditLog(data.entries.slice(-20).reverse());
         }
-      } catch { /* ignore */ }
+      } catch {
+        // Ignore polling errors for the side rail.
+      }
     }
+
     void poll();
     const interval = setInterval(poll, 4000);
     return () => clearInterval(interval);
@@ -126,270 +128,191 @@ export default function CatalogBrowser({ context }: { context: AccessContext }) 
 
   const accessible = filtered.filter((d) => d.accessible);
   const restricted = filtered.filter((d) => !d.accessible);
+  const leftDataset = datasets.find((dataset) => dataset.dataset_id === joinLeft) ?? null;
+  const rightDataset = datasets.find((dataset) => dataset.dataset_id === joinRight) ?? null;
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      {/* Search bar */}
-      <div style={{ display: "grid", gap: 8 }}>
-        <input
-          type="text"
-          placeholder="Search datasets by name, ID, or field..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%",
-            minHeight: 44,
-            padding: "0 16px",
-            border: "1px solid var(--border)",
-            borderRadius: 2,
-            background: "var(--surface-strong)",
-            color: "var(--text)",
-            font: "inherit",
-            fontSize: "0.95rem",
-          }}
-        />
-      </div>
+    <div className="catalogLayout">
+      <section className="panelCard">
+        <div className="panelHeading">
+          <h2>Dataset browser</h2>
+          <span className="panelMeta">explicit selection</span>
+        </div>
+        <label className="fieldGroup">
+          <span>Search datasets</span>
+          <input
+            type="text"
+            placeholder="Search by name, ID, or field"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
 
-      {error && <div className="warningBanner">{error}</div>}
+        {error ? <div className="warningBanner">{error}</div> : null}
 
-      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "1fr 380px" }}>
-        {/* LEFT: Dataset cards + join */}
-        <div style={{ display: "grid", gap: 12, alignContent: "start" }}>
-          {/* Dataset cards */}
-          <div className="panelHeading">
-            <h2>Accessible datasets ({accessible.length})</h2>
-            <span className="panelMeta">click to select for join</span>
-          </div>
+        <div className="catalogDatasetList">
+          {accessible.map((dataset) => (
+            <article key={dataset.dataset_id} className="catalogDatasetCard">
+              <div className="catalogDatasetHeader">
+                <div>
+                  <strong>{dataset.name}</strong>
+                  <p className="workspaceSubnote">{dataset.dataset_id}</p>
+                </div>
+                <div className="datasetBadges">
+                  <span className="datasetBadge strong">Accessible</span>
+                  <span className="datasetBadge">{Math.round(dataset.quality_score * 100)}% quality</span>
+                </div>
+              </div>
 
-          <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
-            {accessible.map((d) => {
-              const isLeft = joinLeft === d.dataset_id;
-              const isRight = joinRight === d.dataset_id;
-              const selected = isLeft || isRight;
-              return (
+              <div className="datasetBadges">
+                <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
+                <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
+                <span className="datasetBadge">{shareModeLabel(dataset.share_mode)}</span>
+              </div>
+
+              <p className="catalogDatasetCopy">
+                Spatial key: {dataset.spatial_key}. Fields: {dataset.fields.slice(0, 5).join(", ")}
+                {dataset.fields.length > 5 ? "..." : ""}.
+              </p>
+
+              <div className="catalogAssignRow">
                 <button
-                  key={d.dataset_id}
                   type="button"
-                  onClick={() => {
-                    if (isLeft) { setJoinLeft(null); return; }
-                    if (isRight) { setJoinRight(null); return; }
-                    if (!joinLeft) { setJoinLeft(d.dataset_id); return; }
-                    setJoinRight(d.dataset_id);
-                  }}
-                  style={{
-                    display: "grid",
-                    gap: 10,
-                    padding: 14,
-                    border: `1px solid ${selected ? "var(--cyan)" : "var(--border)"}`,
-                    borderRadius: 2,
-                    background: selected ? "rgba(0, 212, 255, 0.04)" : "var(--surface-strong)",
-                    color: "var(--text)",
-                    textAlign: "left" as const,
-                    cursor: "pointer",
-                    transition: "border-color 0.15s",
-                    font: "inherit",
-                  }}
+                  className={`workspaceToggle ${joinLeft === dataset.dataset_id ? "strong" : ""}`}
+                  onClick={() => setJoinLeft(joinLeft === dataset.dataset_id ? null : dataset.dataset_id)}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  {joinLeft === dataset.dataset_id ? "Remove left" : "Use as left"}
+                </button>
+                <button
+                  type="button"
+                  className={`workspaceToggle ${joinRight === dataset.dataset_id ? "strong" : ""}`}
+                  onClick={() => setJoinRight(joinRight === dataset.dataset_id ? null : dataset.dataset_id)}
+                >
+                  {joinRight === dataset.dataset_id ? "Remove right" : "Use as right"}
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {restricted.length > 0 ? (
+          <div className="catalogRestricted">
+            <div className="panelHeading">
+              <h2>Restricted</h2>
+              <span className="panelMeta">{restricted.length}</span>
+            </div>
+            <div className="catalogDatasetList">
+              {restricted.map((dataset) => (
+                <article key={dataset.dataset_id} className="catalogDatasetCard restricted">
+                  <div className="catalogDatasetHeader">
                     <div>
-                      <strong style={{ fontSize: "0.92rem" }}>{d.name}</strong>
-                      <div style={{ color: "var(--muted)", fontFamily: "var(--font-mono)", fontSize: 10, marginTop: 4 }}>
-                        {d.dataset_id}
-                      </div>
+                      <strong>{dataset.name}</strong>
+                      <p className="workspaceSubnote">{dataset.dataset_id}</p>
                     </div>
-                    {selected && (
-                      <span style={{
-                        padding: "2px 8px",
-                        border: "1px solid var(--cyan)",
-                        borderRadius: 2,
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 9,
-                        fontWeight: 600,
-                        color: "var(--cyan)",
-                      }}>
-                        {isLeft ? "LEFT" : "RIGHT"}
-                      </span>
-                    )}
+                    <span className="datasetBadge critical">Restricted</span>
                   </div>
                   <div className="datasetBadges">
-                    <span className="datasetBadge">{departmentLabel(d.owner_department)}</span>
-                    <span className="datasetBadge">{classificationLabel(d.classification)}</span>
-                    <span className="datasetBadge">{shareModeLabel(d.share_mode)}</span>
+                    <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
+                    <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
                   </div>
-                  <div style={{ color: "var(--muted)", fontFamily: "var(--font-mono)", fontSize: 10 }}>
-                    Key: {d.spatial_key} | Quality: {Math.round(d.quality_score * 100)}%
-                    {d.masked_fields.length > 0 && ` | Masked: ${d.masked_fields.join(", ")}`}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {restricted.length > 0 && (
-            <>
-              <div className="panelHeading" style={{ marginTop: 8 }}>
-                <h2>Restricted ({restricted.length})</h2>
-                <span className="panelMeta">access denied</span>
-              </div>
-              <div style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}>
-                {restricted.map((d) => (
-                  <div
-                    key={d.dataset_id}
-                    style={{
-                      padding: 14,
-                      border: "1px solid var(--border)",
-                      borderRadius: 2,
-                      background: "var(--surface)",
-                      opacity: 0.6,
-                    }}
-                  >
-                    <strong style={{ fontSize: "0.92rem" }}>{d.name}</strong>
-                    <div className="datasetBadges" style={{ marginTop: 8 }}>
-                      <span className="datasetBadge">{departmentLabel(d.owner_department)}</span>
-                      <span className="datasetBadge critical">Denied</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Join panel */}
-          {(joinLeft || joinRight) && (
-            <div className="card" style={{ borderColor: "rgba(0, 212, 255, 0.2)" }}>
-              <div className="panelHeading">
-                <h2>Cross-department join</h2>
-                <span className="panelMeta">POST /join</span>
-              </div>
-              <div style={{ display: "grid", gap: 10 }}>
-                <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--cyan)" }}>
-                    {joinLeft ?? "select left"} + {joinRight ?? "select right"}
-                  </span>
-                  <label style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--muted)", letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
-                      Join key
-                    </span>
-                    <input
-                      type="text"
-                      value={joinKey}
-                      onChange={(e) => setJoinKey(e.target.value)}
-                      style={{
-                        minHeight: 32,
-                        padding: "0 10px",
-                        border: "1px solid var(--border)",
-                        borderRadius: 2,
-                        background: "var(--surface-muted)",
-                        color: "var(--text)",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 12,
-                        width: 140,
-                      }}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="saveButton"
-                    disabled={!joinLeft || !joinRight || joining}
-                    onClick={fireJoin}
-                  >
-                    {joining ? "Joining..." : "Execute join"}
-                  </button>
-                </div>
-
-                {joinResult && (
-                  <div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--cyan)", marginBottom: 8 }}>
-                      {joinResult.result_count} rows returned
-                    </div>
-                    <div className="tableWrap" style={{ maxHeight: 300, overflow: "auto" }}>
-                      <table className="dataTable">
-                        <thead>
-                          <tr>
-                            <th>Join key</th>
-                            <th>Left record</th>
-                            <th>Right record</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {joinResult.results.slice(0, 20).map((row, i) => (
-                            <tr key={i}>
-                              <td>{String((row as Record<string, unknown>).join_value ?? "")}</td>
-                              <td style={{ whiteSpace: "pre-wrap", maxWidth: 300 }}>
-                                {JSON.stringify((row as Record<string, unknown>).left, null, 1)?.slice(0, 200)}
-                              </td>
-                              <td style={{ whiteSpace: "pre-wrap", maxWidth: 300 }}>
-                                {JSON.stringify((row as Record<string, unknown>).right, null, 1)?.slice(0, 200)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
+                </article>
+              ))}
             </div>
-          )}
+          </div>
+        ) : null}
+      </section>
+
+      <section className="panelCard">
+        <div className="panelHeading">
+          <h2>Join composer</h2>
+          <span className="panelMeta">POST /join</span>
+        </div>
+        <div className="joinSlotGrid">
+          <div className="joinSlot">
+            <span>Left dataset</span>
+            <strong>{leftDataset?.name ?? "Unassigned"}</strong>
+            <p>{leftDataset?.dataset_id ?? "Choose a dataset from the browser."}</p>
+          </div>
+          <div className="joinSlot">
+            <span>Right dataset</span>
+            <strong>{rightDataset?.name ?? "Unassigned"}</strong>
+            <p>{rightDataset?.dataset_id ?? "Choose a second dataset from the browser."}</p>
+          </div>
         </div>
 
-        {/* RIGHT: Audit log panel */}
-        <div className="card" style={{ alignSelf: "start", position: "sticky", top: 80 }}>
-          <div className="panelHeading">
-            <h2>Audit trail</h2>
-            <span className="liveIndicator">live / last 20</span>
+        <label className="fieldGroup">
+          <span>Join key</span>
+          <input type="text" value={joinKey} onChange={(e) => setJoinKey(e.target.value)} />
+        </label>
+
+        <button
+          type="button"
+          className="saveButton"
+          disabled={!joinLeft || !joinRight || joining}
+          onClick={fireJoin}
+        >
+          {joining ? "Joining..." : "Execute join"}
+        </button>
+
+        {joinResult ? (
+          <div className="joinResultBlock">
+            <div className="panelHeading">
+              <h2>Join result</h2>
+              <span className="panelMeta">{joinResult.result_count} rows</span>
+            </div>
+            <div className="tableWrap">
+              <table className="dataTable">
+                <thead>
+                  <tr>
+                    <th>Join key</th>
+                    <th>Left record</th>
+                    <th>Right record</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {joinResult.results.slice(0, 20).map((row, i) => (
+                    <tr key={i}>
+                      <td>{String((row as Record<string, unknown>).join_value ?? "")}</td>
+                      <td className="catalogJsonCell">
+                        {JSON.stringify((row as Record<string, unknown>).left, null, 1)?.slice(0, 200)}
+                      </td>
+                      <td className="catalogJsonCell">
+                        {JSON.stringify((row as Record<string, unknown>).right, null, 1)?.slice(0, 200)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div style={{ display: "grid", gap: 4, maxHeight: 600, overflow: "auto" }}>
-            {auditLog.length === 0 && (
-              <p style={{ color: "var(--muted)", fontSize: "0.85rem", margin: 0 }}>
-                Waiting for audit events...
-              </p>
-            )}
-            {auditLog.map((entry) => (
-              <div
-                key={entry.log_id}
-                style={{
-                  display: "grid",
-                  gap: 4,
-                  padding: "8px 10px",
-                  border: `1px solid ${entry.outcome === "denied" ? "rgba(255, 51, 102, 0.15)" : "var(--border)"}`,
-                  borderRadius: 2,
-                  background: entry.outcome === "denied" ? "rgba(255, 51, 102, 0.04)" : "transparent",
-                  animation: "slide-in 0.3s ease",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 9,
-                    fontWeight: 600,
-                    color: entry.outcome === "denied" ? "var(--red)" : "var(--cyan)",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase" as const,
-                  }}>
-                    {entry.outcome}
-                  </span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--muted)" }}>
-                    {new Date(entry.timestamp).toLocaleTimeString()}
-                  </span>
-                </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--muted-strong)" }}>
-                  {entry.endpoint}
-                </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--muted)" }}>
-                  {entry.requester_user_id} / {entry.requester_department}
-                  {entry.datasets.length > 0 && ` → ${entry.datasets.join(", ")}`}
-                </div>
-                {entry.denial_reason && (
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--red)" }}>
-                    {entry.denial_reason}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+        ) : null}
+      </section>
+
+      <aside className="panelCard catalogAuditRail">
+        <div className="panelHeading">
+          <h2>Audit trail</h2>
+          <span className="panelMeta">last 20</span>
         </div>
-      </div>
+        <div className="auditList">
+          {auditLog.length === 0 ? (
+            <p className="workspaceEmpty">Waiting for audit events.</p>
+          ) : null}
+          {auditLog.map((entry) => (
+            <article key={entry.log_id} className={`auditItem ${entry.outcome === "denied" ? "critical" : ""}`}>
+              <div className="auditItemTop">
+                <strong>{entry.endpoint}</strong>
+                <span className={`datasetBadge ${entry.outcome === "denied" ? "critical" : "strong"}`}>
+                  {entry.outcome}
+                </span>
+              </div>
+              <p className="workspaceSubnote">
+                {departmentLabel(entry.requester_department)} · {entry.datasets.join(", ")}
+              </p>
+              {entry.denial_reason ? <p className="workspaceSubnote">{entry.denial_reason}</p> : null}
+            </article>
+          ))}
+        </div>
+      </aside>
     </div>
   );
 }

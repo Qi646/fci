@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { resolveViewer } from "../../lib/viewer";
 import CatalogBrowser from "./CatalogBrowser";
 
@@ -11,18 +10,19 @@ export default async function CatalogPage({ searchParams }: PageProps) {
 
   return (
     <main className="sectionShell">
-      <header className="sectionHeader">
+      <header className="pageHeader">
         <div>
           <p className="sectionKicker">Data catalog</p>
           <h1>Browse, join, and audit</h1>
           <p className="sectionLead">
-            Search all registered datasets, fire cross-department joins with one click,
-            and watch the audit trail update in real time.
+            Search all registered datasets, assign explicit join roles, and watch the audit trail
+            update in real time.
           </p>
         </div>
-        <Link className="backLink" href="/">
-          Back to views
-        </Link>
+        <div className="pageHeaderMeta">
+          <span className="panelMeta">Viewer</span>
+          <strong>{viewer.profile.label}</strong>
+        </div>
       </header>
 
       <CatalogBrowser context={viewer.context} />

@@ -36,6 +36,19 @@
     "ward",
     "zone_id"
   ],
+  "ui_capabilities": [
+    "geospatial",
+    "network",
+    "ridership",
+    "table"
+  ],
+  "supported_views": [
+    {
+      "view_id": "transit",
+      "status": "native",
+      "reason": "Provides the stop network plot and ridership table."
+    }
+  ],
   "records": [
     {
       "stop_id": "KW-STOP-001",

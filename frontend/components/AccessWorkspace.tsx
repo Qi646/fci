@@ -170,7 +170,7 @@ export default function AccessWorkspace({ context }: Props) {
   if (!response) {
     return (
       <div className="accessWorkspace">
-        <section className="card">
+        <section className="panelCard">
           <div className="panelHeading">
             <h2>Loading access settings</h2>
             <span className="panelMeta">backend-backed configuration</span>

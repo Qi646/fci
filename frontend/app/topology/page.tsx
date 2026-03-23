@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { resolveViewer } from "../../lib/viewer";
 import TopologyDiagram from "./TopologyDiagram";
 
@@ -11,7 +10,7 @@ export default async function TopologyPage({ searchParams }: PageProps) {
 
   return (
     <main className="sectionShell">
-      <header className="sectionHeader">
+      <header className="pageHeader">
         <div>
           <p className="sectionKicker">Data mesh</p>
           <h1>Federation topology</h1>
@@ -20,13 +19,14 @@ export default async function TopologyPage({ searchParams }: PageProps) {
             query fires, the relevant edge lights up - an architecture diagram that is alive.
           </p>
         </div>
-        <Link className="backLink" href="/">
-          Back to views
-        </Link>
+        <div className="pageHeaderMeta">
+          <span className="panelMeta">Viewer</span>
+          <strong>{viewer.profile.label}</strong>
+        </div>
       </header>
 
       <section
-        className="card"
+        className="panelCard"
         style={{
           padding: 0,
           overflow: "hidden",

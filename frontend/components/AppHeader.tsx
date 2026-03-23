@@ -41,7 +41,7 @@ export default function AppHeader() {
     <header className="appHeader">
       <div className="appHeaderInner">
         <div className="appBrandBlock">
-          <p className="appBrandEyebrow">Municipal Operations Console</p>
+          <p className="appBrandEyebrow">Municipal operations console</p>
           <Link href={buildHref("/")} className="appBrand">
             Data Infrastructure
           </Link>
@@ -88,21 +88,6 @@ export default function AppHeader() {
             <span className="accessChip">Audit logged</span>
           </div>
         </div>
-
-        <nav className="appNav" aria-label="Primary">
-          <Link href={buildHref("/")} className="appNavLink">
-            Views
-          </Link>
-          <Link href={buildHref("/topology")} className="appNavLink">
-            Topology
-          </Link>
-          <Link href={buildHref("/catalog")} className="appNavLink">
-            Catalog
-          </Link>
-          <Link href={buildHref("/access")} className="appNavLink">
-            Access
-          </Link>
-        </nav>
       </div>
     </header>
   );

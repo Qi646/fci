@@ -47,6 +47,19 @@
     "rate_per_1000",
     "alert"
   ],
+  "ui_capabilities": [
+    "matrix",
+    "ward_rollup",
+    "surveillance",
+    "table"
+  ],
+  "supported_views": [
+    {
+      "view_id": "public-health",
+      "status": "native",
+      "reason": "Provides the ward-by-case matrix and the surveillance table."
+    }
+  ],
   "records": [
     {
       "record_id": "HEALTH-2024-W33-001-RESP",

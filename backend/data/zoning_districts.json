@@ -20,6 +20,13 @@
     "lat",
     "lng"
   ],
+  "ui_capabilities": [
+    "parcel_rules",
+    "zoning",
+    "geospatial",
+    "table"
+  ],
+  "supported_views": [],
   "pii_fields": [],
   "field_mask_rules": {},
   "row_filter_rules": [],

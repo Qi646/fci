@@ -11,6 +11,12 @@ import {
   purposeLabel,
   shareModeLabel,
 } from "../lib/viewer";
+import {
+  getDatasetViewSupport,
+  getSupportedViewLabels,
+  isRenderableSupport,
+  OperationalViewId,
+} from "../lib/views";
 
 type ViewerSummary = {
   profileKey: string;
@@ -23,6 +29,7 @@ type ViewerSummary = {
 
 type Props = {
   viewer: ViewerSummary;
+  viewId: OperationalViewId;
   title?: string;
   summary: string;
   datasets: CatalogDataset[];
@@ -31,20 +38,27 @@ type Props = {
 
 function restrictionNote(dataset: CatalogDataset) {
   if (!dataset.accessible) {
-    return "Not currently available to this department and purpose.";
+    return "Not currently available to this viewer.";
   }
   if (dataset.access_mode === "aggregate_only") {
-    return "This dataset is limited to aggregate output for the current viewer.";
+    return "Only summary output is available for the current viewer.";
   }
   if (dataset.masked_fields.length > 0) {
     return `Masked fields: ${dataset.masked_fields.join(", ")}.`;
   }
-  return "Full detail is currently allowed for this viewer.";
+  return "Available in full detail for the current viewer.";
+}
+
+function statusTone(status: "native" | "supplemental" | "unsupported") {
+  if (status === "native") return "strong";
+  if (status === "supplemental") return "warning";
+  return "critical";
 }
 
 export default function GovernedViewPanel({
   viewer,
-  title = "Governed Workspace",
+  viewId,
+  title = "Workspace",
   summary,
   datasets,
   defaultIncludedIds,
@@ -52,13 +66,22 @@ export default function GovernedViewPanel({
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const accessibleIds = datasets
+    .filter((dataset) => dataset.accessible)
+    .map((dataset) => dataset.dataset_id);
   const includedIds = normalizeIncludedDatasets(
     searchParams.getAll("include"),
-    datasets.filter((dataset) => dataset.accessible).map((dataset) => dataset.dataset_id),
+    accessibleIds,
     defaultIncludedIds,
   );
 
-  const included = datasets.filter((dataset) => includedIds.includes(dataset.dataset_id));
+  const selected = datasets.filter((dataset) => includedIds.includes(dataset.dataset_id));
+  const selectedRenderable = selected.filter((dataset) =>
+    isRenderableSupport(getDatasetViewSupport(dataset, viewId).status),
+  );
+  const selectedDormant = selected.filter(
+    (dataset) => !isRenderableSupport(getDatasetViewSupport(dataset, viewId).status),
+  );
   const available = datasets.filter(
     (dataset) => dataset.accessible && !includedIds.includes(dataset.dataset_id),
   );
@@ -82,125 +105,170 @@ export default function GovernedViewPanel({
   }
 
   return (
-    <section className="governedPanel" aria-label="Governed workspace controls">
-      <div className="governedPanelHeader">
+    <aside className="workspaceRail" aria-label="Dataset workspace">
+      <div className="workspaceRailHeader">
         <div>
-          <p className="sectionKicker">Access Context</p>
+          <p className="sectionKicker">Workspace</p>
           <h2>{title}</h2>
-          <p className="dataControlsSummary">{summary}</p>
+          <p className="sectionLead compact">{summary}</p>
         </div>
-        <div className="governedIdentity">
-          <span className="policyBadge strong">{departmentLabel(viewer.department)}</span>
-          <span className="policyBadge">{purposeLabel(viewer.purpose)}</span>
-          <span className="policyBadge">{departmentLabel(viewer.role)}</span>
-          <span className="policyBadge">Audit logged</span>
+        <div className="workspaceIdentity">
+          <span className="datasetBadge strong">{departmentLabel(viewer.department)}</span>
+          <span className="datasetBadge">{purposeLabel(viewer.purpose)}</span>
         </div>
       </div>
 
-      <div className="viewerFacts">
-        <div className="viewerFact">
+      <div className="workspaceContext">
+        <div className="workspaceFact">
           <span>Viewer</span>
           <strong>{viewer.label}</strong>
         </div>
-        <div className="viewerFact">
-          <span>Department</span>
-          <strong>{departmentLabel(viewer.department)}</strong>
-        </div>
-        <div className="viewerFact">
+        <div className="workspaceFact">
           <span>Role</span>
           <strong>{departmentLabel(viewer.role)}</strong>
         </div>
-        <div className="viewerFact">
-          <span>Approved purposes</span>
-          <strong>{viewer.approvedPurposes.map((item) => purposeLabel(item)).join(", ")}</strong>
+        <div className="workspaceFact">
+          <span>Selected</span>
+          <strong>{selected.length}</strong>
+        </div>
+        <div className="workspaceFact">
+          <span>Rendering</span>
+          <strong>{selectedRenderable.length}</strong>
         </div>
       </div>
 
-      <div className="workspaceColumns">
-        <section className="workspaceColumn">
-          <div className="workspaceColumnHeader">
-            <h3>Included in this view</h3>
-            <span>{included.length}</span>
-          </div>
-          {included.map((dataset) => (
-            <article key={dataset.dataset_id} className="governedDatasetCard">
-              <div className="governedDatasetTop">
+      <section className="workspaceSection">
+        <div className="workspaceSectionHeader">
+          <h3>Active in this view</h3>
+          <span>{selectedRenderable.length}</span>
+        </div>
+        {selectedRenderable.length === 0 ? (
+          <p className="workspaceEmpty">No selected datasets currently contribute to this view.</p>
+        ) : null}
+        {selectedRenderable.map((dataset) => {
+          const support = getDatasetViewSupport(dataset, viewId);
+          return (
+            <article key={dataset.dataset_id} className="workspaceDatasetCard">
+              <div className="workspaceDatasetTop">
                 <div>
                   <strong>{dataset.name}</strong>
-                  <p>{restrictionNote(dataset)}</p>
+                  <p>{support.reason}</p>
                 </div>
                 <button type="button" className="workspaceToggle" onClick={() => toggleDataset(dataset.dataset_id)}>
                   Remove
                 </button>
               </div>
               <div className="datasetBadges">
+                <span className={`datasetBadge ${statusTone(support.status)}`}>
+                  {support.status === "native" ? "Rendering" : "Supplemental"}
+                </span>
                 <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
                 <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
-                <span className="datasetBadge">{shareModeLabel(dataset.share_mode)}</span>
-                <span className="datasetBadge strong">{accessModeLabel(dataset.access_mode)}</span>
+                <span className="datasetBadge">{accessModeLabel(dataset.access_mode)}</span>
               </div>
             </article>
-          ))}
-          {included.length === 0 ? (
-            <p className="workspaceEmpty">No approved datasets are currently included in this workspace.</p>
-          ) : null}
-        </section>
+          );
+        })}
+      </section>
 
-        <section className="workspaceColumn">
-          <div className="workspaceColumnHeader">
-            <h3>Available to add</h3>
-            <span>{available.length}</span>
-          </div>
-          {available.map((dataset) => (
-            <article key={dataset.dataset_id} className="governedDatasetCard">
-              <div className="governedDatasetTop">
+      <section className="workspaceSection">
+        <div className="workspaceSectionHeader">
+          <h3>Selected but not rendered here</h3>
+          <span>{selectedDormant.length}</span>
+        </div>
+        {selectedDormant.length === 0 ? (
+          <p className="workspaceEmpty">No selected datasets are being ignored by this view.</p>
+        ) : null}
+        {selectedDormant.map((dataset) => {
+          const support = getDatasetViewSupport(dataset, viewId);
+          const supportedViews = getSupportedViewLabels(dataset);
+          return (
+            <article key={dataset.dataset_id} className="workspaceDatasetCard dormant">
+              <div className="workspaceDatasetTop">
+                <div>
+                  <strong>{dataset.name}</strong>
+                  <p>{support.reason}</p>
+                  {supportedViews.length > 0 ? (
+                    <p className="workspaceSubnote">Supports: {supportedViews.join(", ")}.</p>
+                  ) : null}
+                </div>
+                <button type="button" className="workspaceToggle" onClick={() => toggleDataset(dataset.dataset_id)}>
+                  Remove
+                </button>
+              </div>
+              <div className="datasetBadges">
+                <span className="datasetBadge critical">Not rendered</span>
+                <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
+                <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      <section className="workspaceSection">
+        <div className="workspaceSectionHeader">
+          <h3>Available to add</h3>
+          <span>{available.length}</span>
+        </div>
+        {available.map((dataset) => {
+          const support = getDatasetViewSupport(dataset, viewId);
+          const supportedViews = getSupportedViewLabels(dataset);
+          return (
+            <article key={dataset.dataset_id} className="workspaceDatasetCard muted">
+              <div className="workspaceDatasetTop">
                 <div>
                   <strong>{dataset.name}</strong>
                   <p>{restrictionNote(dataset)}</p>
+                  <p className="workspaceSubnote">{support.reason}</p>
+                  {!isRenderableSupport(support.status) && supportedViews.length > 0 ? (
+                    <p className="workspaceSubnote">Renders in: {supportedViews.join(", ")}.</p>
+                  ) : null}
                 </div>
-                <button type="button" className="workspaceToggle strong" onClick={() => toggleDataset(dataset.dataset_id)}>
+                <button
+                  type="button"
+                  className={`workspaceToggle ${isRenderableSupport(support.status) ? "strong" : ""}`}
+                  onClick={() => toggleDataset(dataset.dataset_id)}
+                >
                   Add
                 </button>
               </div>
               <div className="datasetBadges">
+                <span className={`datasetBadge ${statusTone(support.status)}`}>
+                  {isRenderableSupport(support.status) ? "Compatible" : "Will not render"}
+                </span>
                 <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
-                <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
                 <span className="datasetBadge">{shareModeLabel(dataset.share_mode)}</span>
-                <span className="datasetBadge strong">{accessModeLabel(dataset.access_mode)}</span>
               </div>
             </article>
-          ))}
-          {available.length === 0 ? (
-            <p className="workspaceEmpty">No additional approved datasets are available for this purpose.</p>
-          ) : null}
-        </section>
+          );
+        })}
+      </section>
 
-        <section className="workspaceColumn">
-          <div className="workspaceColumnHeader">
-            <h3>Restricted or unavailable</h3>
-            <span>{restricted.length}</span>
-          </div>
-          {restricted.map((dataset) => (
-            <article key={dataset.dataset_id} className="governedDatasetCard restricted">
-              <div className="governedDatasetTop">
-                <div>
-                  <strong>{dataset.name}</strong>
-                  <p>{restrictionNote(dataset)}</p>
-                </div>
+      <section className="workspaceSection">
+        <div className="workspaceSectionHeader">
+          <h3>Restricted</h3>
+          <span>{restricted.length}</span>
+        </div>
+        {restricted.map((dataset) => (
+          <article key={dataset.dataset_id} className="workspaceDatasetCard restricted">
+            <div className="workspaceDatasetTop">
+              <div>
+                <strong>{dataset.name}</strong>
+                <p>{restrictionNote(dataset)}</p>
               </div>
-              <div className="datasetBadges">
-                <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
-                <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
-                <span className="datasetBadge">{shareModeLabel(dataset.share_mode)}</span>
-                <span className="datasetBadge critical">Denied</span>
-              </div>
-            </article>
-          ))}
-          <Link className="workspaceManageLink" href={accessHref()}>
-            Manage outbound sharing
-          </Link>
-        </section>
-      </div>
-    </section>
+            </div>
+            <div className="datasetBadges">
+              <span className="datasetBadge critical">Restricted</span>
+              <span className="datasetBadge">{departmentLabel(dataset.owner_department)}</span>
+              <span className="datasetBadge">{classificationLabel(dataset.classification)}</span>
+            </div>
+          </article>
+        ))}
+        <Link className="workspaceManageLink" href={accessHref()}>
+          Manage sharing defaults
+        </Link>
+      </section>
+    </aside>
   );
 }

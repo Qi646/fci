@@ -40,6 +40,19 @@
     "centroid_lat",
     "centroid_lng"
   ],
+  "ui_capabilities": [
+    "geospatial",
+    "map",
+    "zone_metrics",
+    "capacity_analysis"
+  ],
+  "supported_views": [
+    {
+      "view_id": "engineering",
+      "status": "native",
+      "reason": "Plots capacity utilization and zone stress directly on the engineering map."
+    }
+  ],
   "records": [
     {
       "zone_id": "ENG-ZONE-001",

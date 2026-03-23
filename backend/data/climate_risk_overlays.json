@@ -34,6 +34,19 @@
     "priority_score",
     "recommended_action"
   ],
+  "ui_capabilities": [
+    "scatter",
+    "ward_rollup",
+    "risk_overlay",
+    "table"
+  ],
+  "supported_views": [
+    {
+      "view_id": "climate",
+      "status": "native",
+      "reason": "Feeds the climate risk scatter and ward priority table."
+    }
+  ],
   "records": [
     {
       "overlay_id": "CLIMATE-001",

@@ -22,6 +22,8 @@ const defaultProfileByPath: Record<string, AccessProfileKey> = {
   "/social-services": "socialServices",
   "/transit": "transit",
   "/climate": "climate",
+  "/catalog": "engineering",
+  "/topology": "engineering",
   "/access": "admin",
 };
 

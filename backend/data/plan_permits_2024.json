@@ -53,6 +53,25 @@
     "lat",
     "lng"
   ],
+  "ui_capabilities": [
+    "geospatial",
+    "map_points",
+    "time_series",
+    "ward_rollup",
+    "permits"
+  ],
+  "supported_views": [
+    {
+      "view_id": "planning",
+      "status": "native",
+      "reason": "Feeds the permit pipeline trend and ward allocation analysis."
+    },
+    {
+      "view_id": "engineering",
+      "status": "supplemental",
+      "reason": "Adds permit demand overlays to the engineering capacity map."
+    }
+  ],
   "pii_fields": [
     "applicant_name"
   ],

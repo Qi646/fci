@@ -52,6 +52,15 @@ DATASET_FILES = [
     "scorecard_metrics.json",
 ]
 
+UI_VIEW_DEFINITIONS = {
+    "engineering": {"label": "Engineering", "unsupported_reason": "This view only renders engineering capacity layers and permit overlays."},
+    "planning": {"label": "Planning", "unsupported_reason": "This view is built for permit pipeline and ward allocation analysis."},
+    "public-health": {"label": "Public health", "unsupported_reason": "This view only renders ward-by-case surveillance data."},
+    "transit": {"label": "Transit", "unsupported_reason": "This view only renders stop-level network and ridership data."},
+    "social-services": {"label": "Social services", "unsupported_reason": "This view only renders cohort demand and service-planning data."},
+    "climate": {"label": "Climate", "unsupported_reason": "This view only renders climate risk overlay data."},
+}
+
 CLEARANCE_ORDER = ["open", "internal", "confidential", "personal_sensitive", "health_sensitive"]
 COMMON_TEMPORAL_FIELDS = {
     "issued_date",
@@ -305,6 +314,32 @@ def load_datasets() -> dict[str, dict[str, Any]]:
         payload = json.loads((DATA_DIR / file_name).read_text())
         loaded[payload["dataset_id"]] = payload
     return loaded
+
+
+def build_view_support(dataset: dict[str, Any]) -> list[dict[str, str]]:
+    supported = {
+        item["view_id"]: {
+            "view_id": item["view_id"],
+            "status": item["status"],
+            "reason": item["reason"],
+        }
+        for item in dataset.get("supported_views", [])
+        if item.get("view_id") in UI_VIEW_DEFINITIONS
+    }
+
+    view_support = []
+    for view_id, definition in UI_VIEW_DEFINITIONS.items():
+        view_support.append(
+            supported.get(
+                view_id,
+                {
+                    "view_id": view_id,
+                    "status": "unsupported",
+                    "reason": definition["unsupported_reason"],
+                },
+            )
+        )
+    return view_support
 
 
 def infer_sharing_policy(dataset: dict[str, Any]) -> str:
@@ -1564,6 +1599,8 @@ def get_catalog(
             "access_mode": decision.access_mode if decision.allowed else "denied",
             "masked_fields": sorted(decision.masked_fields),
             "permitted_use_cases": dataset.get("permitted_use_cases", []),
+            "ui_capabilities": dataset.get("ui_capabilities", []),
+            "view_support": build_view_support(dataset),
         }
         entries.append(summary)
 

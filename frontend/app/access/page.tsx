@@ -1,4 +1,3 @@
-import Link from "next/link";
 import AccessWorkspace from "../../components/AccessWorkspace";
 import { resolveViewer } from "../../lib/viewer";
 
@@ -11,7 +10,7 @@ export default async function AccessPage({ searchParams }: PageProps) {
 
   return (
     <main className="sectionShell">
-      <header className="sectionHeader">
+      <header className="pageHeader">
         <div>
           <p className="sectionKicker">Access</p>
           <h1>Sharing and default access</h1>
@@ -21,9 +20,10 @@ export default async function AccessPage({ searchParams }: PageProps) {
             views by default.
           </p>
         </div>
-        <Link className="backLink" href="/">
-          Back to views
-        </Link>
+        <div className="pageHeaderMeta">
+          <span className="panelMeta">Viewer</span>
+          <strong>{viewer.profile.label}</strong>
+        </div>
       </header>
 
       <AccessWorkspace context={viewer.context} />

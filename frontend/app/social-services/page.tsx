@@ -1,7 +1,8 @@
-import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
+import MetricStrip from "../../components/MetricStrip";
 import { asRecords, CatalogResponse, fetchApi, QueryResult } from "../../lib/api";
 import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
+import { getDatasetViewSupport, isRenderableSupport } from "../../lib/views";
 
 type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -26,10 +27,14 @@ export default async function SocialServicesPage({ searchParams }: PageProps) {
   const totalPopulation = sortedRecords.reduce((sum, record) => sum + Number(record.population ?? 0), 0);
   const totalNeed = sortedRecords.reduce((sum, record) => sum + Number(record.households_in_need ?? 0), 0);
   const totalCases = sortedRecords.reduce((sum, record) => sum + Number(record.active_cases ?? 0), 0);
+  const selectedDormantWarnings = catalogDatasets
+    .filter((dataset) => dataset.accessible && includedIds.includes(dataset.dataset_id))
+    .filter((dataset) => !isRenderableSupport(getDatasetViewSupport(dataset, "social-services").status))
+    .map((dataset) => `${dataset.name} is selected but does not render in the social-services view.`);
 
   return (
     <main className="sectionShell">
-      <header className="sectionHeader">
+      <header className="pageHeader">
         <div>
           <p className="sectionKicker">Social services</p>
           <h1>Cohort demand</h1>
@@ -38,117 +43,121 @@ export default async function SocialServicesPage({ searchParams }: PageProps) {
             the corresponding table.
           </p>
         </div>
-        <Link className="backLink" href="/">
-          Back to overview
-        </Link>
+        <div className="pageHeaderMeta">
+          <span className="panelMeta">Primary question</span>
+          <strong>Which cohorts and wards show the highest demand?</strong>
+        </div>
       </header>
 
-      <section className="summaryGrid">
-        <article className="summaryCard">
-          <span>Population tracked</span>
-          <strong>{totalPopulation}</strong>
-        </article>
-        <article className="summaryCard">
-          <span>Households in need</span>
-          <strong>{totalNeed}</strong>
-        </article>
-        <article className="summaryCard">
-          <span>Active cases</span>
-          <strong>{totalCases}</strong>
-        </article>
-      </section>
-
-      <GovernedViewPanel
-        viewer={{
-          profileKey: viewer.profileKey,
-          label: viewer.profile.label,
-          department: viewer.profile.department,
-          role: viewer.profile.role,
-          purpose: viewer.purpose,
-          approvedPurposes: viewer.profile.approvedPurposes ?? [],
-        }}
-        title="Social services workspace"
-        summary="This page defaults to the confidential social-services dataset because the user task here is internal service demand planning."
-        datasets={catalogDatasets}
-        defaultIncludedIds={["social-services-demographics"]}
+      <MetricStrip
+        metrics={[
+          { label: "Population tracked", value: totalPopulation },
+          { label: "Households in need", value: totalNeed },
+          { label: "Active cases", value: totalCases, tone: totalCases > 0 ? "warning" : "default" },
+        ]}
       />
 
-      {!recordsResult.ok ? (
-        <div className="warningBanner">
-          {recordsResult.error?.reason ?? recordsResult.error?.error ?? "The backend denied this dataset."}
-        </div>
-      ) : null}
-      {!includeSocialServices ? (
-        <div className="warningBanner">
-          Social services demographics are not included in this workspace.
-        </div>
-      ) : null}
+      <section className="workspaceLayout">
+        <div className="workspaceMain">
+          {!recordsResult.ok ? (
+            <div className="warningBanner">
+              {recordsResult.error?.reason ?? recordsResult.error?.error ?? "The backend denied this dataset."}
+            </div>
+          ) : null}
+          {!includeSocialServices ? (
+            <div className="warningBanner">
+              Social services demographics are not included in this workspace.
+            </div>
+          ) : null}
+          {selectedDormantWarnings.map((warning) => (
+            <div key={warning} className="warningBanner">
+              {warning}
+            </div>
+          ))}
 
-      {!includeSocialServices ? (
-        <section className="card">
-          <div className="panelHeading">
-            <h2>No datasets selected</h2>
-            <span className="panelMeta">workspace state</span>
-          </div>
-          <p className="sectionLead compact">
-            Add the social services dataset above to render this analysis.
-          </p>
-        </section>
-      ) : (
-      <section className="twoUp">
-        <article className="card">
-          <div className="panelHeading">
-            <h2>Population by cohort</h2>
-            <span className="panelMeta">horizontal index</span>
-          </div>
-          <div className="barList">
-            {sortedRecords.map((record) => {
-              const population = Number(record.population ?? 0);
-              return (
-                <div key={`${record.ward}-${record.cohort}`} className="barRow">
-                  <span className="barLabel">{String(record.cohort).replaceAll("_", " ")}</span>
-                  <div className="barTrack">
-                    <div className="barValue" style={{ width: `${(population / maxPopulation) * 100}%` }} />
-                  </div>
-                  <span className="barMetric">{population}</span>
+          {!includeSocialServices ? (
+            <section className="panelCard">
+              <div className="panelHeading">
+                <h2>No renderable datasets selected</h2>
+                <span className="panelMeta">workspace state</span>
+              </div>
+              <p className="sectionLead compact">
+                Add the social services dataset from the workspace rail to render this analysis.
+              </p>
+            </section>
+          ) : (
+            <section className="twoUp">
+              <article className="panelCard">
+                <div className="panelHeading">
+                  <h2>Population by cohort</h2>
+                  <span className="panelMeta">horizontal index</span>
                 </div>
-              );
-            })}
-          </div>
-        </article>
+                <div className="barList">
+                  {sortedRecords.map((record) => {
+                    const population = Number(record.population ?? 0);
+                    return (
+                      <div key={`${record.ward}-${record.cohort}`} className="barRow">
+                        <span className="barLabel">{String(record.cohort).replaceAll("_", " ")}</span>
+                        <div className="barTrack">
+                          <div className="barValue" style={{ width: `${(population / maxPopulation) * 100}%` }} />
+                        </div>
+                        <span className="barMetric">{population}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </article>
 
-        <article className="card">
-          <div className="panelHeading">
-            <h2>Demand table</h2>
-            <span className="panelMeta">need vs cases</span>
-          </div>
-          <div className="tableWrap">
-            <table className="dataTable">
-              <thead>
-                <tr>
-                  <th>Cohort</th>
-                  <th>Ward</th>
-                  <th>Population</th>
-                  <th>Need</th>
-                  <th>Active cases</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedRecords.map((record) => (
-                  <tr key={`${record.ward}-${record.cohort}`}>
-                    <td>{String(record.cohort).replaceAll("_", " ")}</td>
-                    <td>{String(record.ward)}</td>
-                    <td>{String(record.population)}</td>
-                    <td>{String(record.households_in_need)}</td>
-                    <td>{String(record.active_cases)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
+              <article className="panelCard">
+                <div className="panelHeading">
+                  <h2>Demand table</h2>
+                  <span className="panelMeta">need vs cases</span>
+                </div>
+                <div className="tableWrap">
+                  <table className="dataTable">
+                    <thead>
+                      <tr>
+                        <th>Cohort</th>
+                        <th>Ward</th>
+                        <th>Population</th>
+                        <th>Need</th>
+                        <th>Active cases</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sortedRecords.map((record) => (
+                        <tr key={`${record.ward}-${record.cohort}`}>
+                          <td>{String(record.cohort).replaceAll("_", " ")}</td>
+                          <td>{String(record.ward)}</td>
+                          <td>{String(record.population)}</td>
+                          <td>{String(record.households_in_need)}</td>
+                          <td>{String(record.active_cases)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+          )}
+        </div>
+
+        <GovernedViewPanel
+          viewer={{
+            profileKey: viewer.profileKey,
+            label: viewer.profile.label,
+            department: viewer.profile.department,
+            role: viewer.profile.role,
+            purpose: viewer.purpose,
+            approvedPurposes: viewer.profile.approvedPurposes ?? [],
+          }}
+          viewId="social-services"
+          title="Social services workspace"
+          summary="The social-services demographics dataset renders natively here. Unsupported selections remain visible with explicit compatibility warnings."
+          datasets={catalogDatasets}
+          defaultIncludedIds={["social-services-demographics"]}
+        />
       </section>
-      )}
     </main>
   );
 }

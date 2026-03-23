@@ -1,5 +1,5 @@
-import Link from "next/link";
 import GovernedViewPanel from "../../components/GovernedViewPanel";
+import MetricStrip from "../../components/MetricStrip";
 import {
   asRecords,
   CatalogResponse,
@@ -7,6 +7,7 @@ import {
   QueryResult,
 } from "../../lib/api";
 import { resolveIncludedDatasetIds, resolveViewer } from "../../lib/viewer";
+import { getDatasetViewSupport, isRenderableSupport } from "../../lib/views";
 import EngineeringMap from "./EngineeringMap";
 
 type PageProps = {
@@ -44,6 +45,10 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
   const accessWarnings = [zonesResult, permitsResult]
     .filter((result) => !result.ok)
     .map((result) => result.error?.reason ?? result.error?.error ?? "The backend denied this dataset.");
+  const selectedDormantWarnings = catalogDatasets
+    .filter((dataset) => dataset.accessible && includedIds.includes(dataset.dataset_id))
+    .filter((dataset) => !isRenderableSupport(getDatasetViewSupport(dataset, "engineering").status))
+    .map((dataset) => `${dataset.name} is selected but does not render in the engineering view.`);
   const selectionWarnings = [
     !includeZones ? "Engineering pressure zones are not included in this workspace." : null,
     !includePermits ? "Planning permit overlays are not included in this workspace." : null,
@@ -76,80 +81,68 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
   const criticalZones = hotspots.filter((zone) => zone.capacity >= 90);
   const permitLoadInCritical = criticalZones.reduce((sum, zone) => sum + zone.permits, 0);
   const avgCapacity = Math.round(hotspots.reduce((sum, zone) => sum + zone.capacity, 0) / Math.max(hotspots.length, 1));
+  const renderableSelectionCount = Number(includeZones) + Number(includePermits);
 
   return (
     <main className="sectionShell">
-      <header className="sectionHeader">
+      <header className="pageHeader">
         <div>
           <p className="sectionKicker">Engineering</p>
           <h1>Water capacity geospatial view</h1>
           <p className="sectionLead">
             Zone centroids and permit coordinates are plotted in actual latitude and longitude
-            space. Bubble area tracks utilization. Blue dots are permit footprints.
+            space. Bubble area tracks utilization, permit overlays show incremental demand.
           </p>
         </div>
-        <Link className="backLink" href="/">
-          Back to overview
-        </Link>
+        <div className="pageHeaderMeta">
+          <span className="panelMeta">Primary question</span>
+          <strong>Where do permit loads meet stressed zones?</strong>
+        </div>
       </header>
 
-      <section className="summaryGrid">
-        <article className="summaryCard">
-          <span>Critical zones</span>
-          <strong>{criticalZones.length}</strong>
-        </article>
-        <article className="summaryCard">
-          <span>Permits in critical zones</span>
-          <strong>{permitLoadInCritical}</strong>
-        </article>
-        <article className="summaryCard">
-          <span>Average utilization</span>
-          <strong>{avgCapacity}%</strong>
-        </article>
-      </section>
-
-      <GovernedViewPanel
-        viewer={{
-          profileKey: viewer.profileKey,
-          label: viewer.profile.label,
-          department: viewer.profile.department,
-          role: viewer.profile.role,
-          purpose: viewer.purpose,
-          approvedPurposes: viewer.profile.approvedPurposes ?? [],
-        }}
-        title="Engineering workspace"
-        summary="This view defaults to engineering pressure zones plus planning permits because that is the common operational question here: where new housing demand meets water-capacity constraints."
-        datasets={catalogDatasets}
-        defaultIncludedIds={["eng-pressure-zones", "plan-permits-2024"]}
+      <MetricStrip
+        metrics={[
+          { label: "Critical zones", value: criticalZones.length, tone: criticalZones.length > 0 ? "critical" : "default" },
+          { label: "Permits in critical zones", value: permitLoadInCritical, tone: permitLoadInCritical > 0 ? "warning" : "default" },
+          { label: "Average utilization", value: `${avgCapacity}%`, tone: avgCapacity >= 90 ? "critical" : avgCapacity >= 75 ? "warning" : "default" },
+        ]}
       />
 
-      {accessWarnings.map((warning) => (
-        <div key={warning} className="warningBanner">
-          {warning}
-        </div>
-      ))}
-      {selectionWarnings.map((warning) => (
-        <div key={warning} className="warningBanner">
-          {warning}
-        </div>
-      ))}
+      <section className="workspaceLayout">
+        <div className="workspaceMain">
+          {accessWarnings.map((warning) => (
+            <div key={warning} className="warningBanner">
+              {warning}
+            </div>
+          ))}
+          {selectionWarnings.map((warning) => (
+            <div key={warning} className="warningBanner">
+              {warning}
+            </div>
+          ))}
+          {selectedDormantWarnings.map((warning) => (
+            <div key={warning} className="warningBanner">
+              {warning}
+            </div>
+          ))}
 
-      {includedIds.length === 0 ? (
-        <section className="card">
-          <div className="panelHeading">
-            <h2>No datasets selected</h2>
-            <span className="panelMeta">workspace state</span>
-          </div>
-          <p className="sectionLead compact">
-            Add at least one approved dataset above to render the engineering analysis view.
-          </p>
-        </section>
-      ) : (
-      <section className="twoUp">
-        <article className="card">
+          {renderableSelectionCount === 0 ? (
+            <section className="panelCard">
+              <div className="panelHeading">
+                <h2>No renderable datasets selected</h2>
+                <span className="panelMeta">workspace state</span>
+              </div>
+              <p className="sectionLead compact">
+                Add engineering pressure zones or planning permits from the workspace rail to
+                render this analysis.
+              </p>
+            </section>
+          ) : (
+            <section className="twoUp">
+              <article className="panelCard">
           <div className="panelHeading">
             <h2>Basemap</h2>
-            <span className="panelMeta">MapLibre Dark Matter / live coordinates</span>
+            <span className="panelMeta">live coordinates</span>
           </div>
           <EngineeringMap
             zones={zones.map((zone) => ({
@@ -174,9 +167,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             <span><i className="legendDot" /> permit units</span>
           </div>
           <p className="annotation">Bubble area = capacity utilization. Blue dots = active permits.</p>
-        </article>
+              </article>
 
-        <article className="card">
+              <article className="panelCard">
           <div className="panelHeading">
             <h2>Zone operating table</h2>
             <span className="panelMeta">sorted by utilization</span>
@@ -205,9 +198,27 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               </tbody>
             </table>
           </div>
-        </article>
+              </article>
+            </section>
+          )}
+        </div>
+
+        <GovernedViewPanel
+          viewer={{
+            profileKey: viewer.profileKey,
+            label: viewer.profile.label,
+            department: viewer.profile.department,
+            role: viewer.profile.role,
+            purpose: viewer.purpose,
+            approvedPurposes: viewer.profile.approvedPurposes ?? [],
+          }}
+          viewId="engineering"
+          title="Engineering workspace"
+          summary="Engineering capacity zones render natively here. Planning permits add demand overlays. Other datasets can still be selected, but the rail will warn when they do not contribute to this view."
+          datasets={catalogDatasets}
+          defaultIncludedIds={["eng-pressure-zones", "plan-permits-2024"]}
+        />
       </section>
-      )}
     </main>
   );
 }

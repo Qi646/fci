@@ -18,6 +18,12 @@
     "source_dataset_id",
     "last_computed"
   ],
+  "ui_capabilities": [
+    "scorecard",
+    "kpis",
+    "governance"
+  ],
+  "supported_views": [],
   "pii_fields": [],
   "field_mask_rules": {},
   "row_filter_rules": [],

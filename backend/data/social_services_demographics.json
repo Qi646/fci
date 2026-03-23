@@ -36,6 +36,19 @@
     "active_cases",
     "service_types"
   ],
+  "ui_capabilities": [
+    "bars",
+    "cohorts",
+    "service_demand",
+    "table"
+  ],
+  "supported_views": [
+    {
+      "view_id": "social-services",
+      "status": "native",
+      "reason": "Provides cohort demand, need, and active case planning data."
+    }
+  ],
   "records": [
     {
       "ward": "Ward 1",
