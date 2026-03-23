@@ -27,7 +27,7 @@ export default function AppHeader() {
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("profile", nextProfileKey);
     nextParams.set("purpose", nextPurpose);
-    router.replace(`${pathname}?${nextParams.toString()}`);
+    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
   }
 
   function buildHref(href: string) {

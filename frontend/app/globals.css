@@ -1,29 +1,29 @@
 :root {
   color-scheme: light;
-  --bg: #f5f1e8;
-  --bg-elevated: #fcfaf6;
-  --bg-panel: rgba(255, 251, 245, 0.94);
-  --bg-panel-strong: #fffdf9;
-  --bg-panel-muted: #f0e8dc;
-  --bg-sidebar: #ede4d6;
-  --bg-ink: #191512;
-  --bg-map: #1f2127;
-  --border: rgba(58, 40, 26, 0.16);
-  --border-strong: rgba(58, 40, 26, 0.3);
-  --rule: rgba(58, 40, 26, 0.08);
-  --text: #1d1916;
-  --text-soft: #5a4a3a;
-  --text-muted: #7b6a59;
-  --accent: #2f4b63;
-  --accent-soft: rgba(47, 75, 99, 0.1);
-  --bronze: #87472b;
-  --bronze-soft: rgba(135, 71, 43, 0.12);
-  --danger: #9b3c2f;
-  --danger-soft: rgba(155, 60, 47, 0.12);
-  --success: #35624e;
-  --success-soft: rgba(53, 98, 78, 0.12);
-  --shadow-sm: 0 1px 2px rgba(29, 25, 22, 0.05);
-  --shadow-md: 0 10px 30px rgba(55, 44, 33, 0.08);
+  --bg: #f8f8fb;
+  --bg-elevated: #ffffff;
+  --bg-panel: rgba(255, 255, 255, 0.95);
+  --bg-panel-strong: #ffffff;
+  --bg-panel-muted: #f1f0f5;
+  --bg-sidebar: #f3f2f7;
+  --bg-ink: #111118;
+  --bg-map: #1a1a2e;
+  --border: rgba(124, 58, 237, 0.12);
+  --border-strong: rgba(124, 58, 237, 0.25);
+  --rule: rgba(124, 58, 237, 0.06);
+  --text: #1a1a2e;
+  --text-soft: #4a4a5e;
+  --text-muted: #8888a0;
+  --accent: #7c3aed;
+  --accent-soft: rgba(124, 58, 237, 0.08);
+  --bronze: #d97706;
+  --bronze-soft: rgba(217, 119, 6, 0.1);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+  --success: #059669;
+  --success-soft: rgba(5, 150, 105, 0.08);
+  --shadow-sm: 0 1px 3px rgba(124, 58, 237, 0.06);
+  --shadow-md: 0 10px 30px rgba(124, 58, 237, 0.08);
 }
 
 @keyframes pulse-glow {
@@ -43,8 +43,8 @@ body {
     linear-gradient(rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0.44)),
     repeating-linear-gradient(
       0deg,
-      rgba(58, 40, 26, 0.018),
-      rgba(58, 40, 26, 0.018) 1px,
+      rgba(124, 58, 237, 0.015),
+      rgba(124, 58, 237, 0.015) 1px,
       transparent 1px,
       transparent 24px
     ),
@@ -83,7 +83,7 @@ code {
   top: 0;
   z-index: 30;
   border-bottom: 1px solid var(--border);
-  background: rgba(245, 241, 232, 0.9);
+  background: rgba(248, 248, 251, 0.92);
   backdrop-filter: blur(14px);
 }
 
@@ -205,7 +205,7 @@ code {
 .statusBadge.warning,
 .metricCard.warning strong {
   color: var(--bronze);
-  border-color: rgba(135, 71, 43, 0.22);
+  border-color: rgba(217, 119, 6, 0.2);
   background: var(--bronze-soft);
 }
 
@@ -213,14 +213,14 @@ code {
 .statusBadge.critical,
 .metricCard.critical strong {
   color: var(--danger);
-  border-color: rgba(155, 60, 47, 0.24);
+  border-color: rgba(220, 38, 38, 0.2);
   background: var(--danger-soft);
 }
 
 .statusBadge.safe,
 .metricPill.safe {
   color: var(--success);
-  border-color: rgba(53, 98, 78, 0.22);
+  border-color: rgba(5, 150, 105, 0.18);
   background: var(--success-soft);
 }
 
@@ -262,7 +262,7 @@ code {
 }
 
 .sidebarLink:hover {
-  background: rgba(255, 255, 255, 0.36);
+  background: rgba(124, 58, 237, 0.04);
   border-color: var(--border);
 }
 
@@ -362,7 +362,7 @@ code {
 .warningBanner {
   padding: 10px 12px;
   border-left: 3px solid var(--bronze);
-  background: rgba(135, 71, 43, 0.08);
+  background: rgba(217, 119, 6, 0.08);
   color: var(--text);
   font-size: 0.92rem;
 }
@@ -479,11 +479,11 @@ code {
 .workspaceDatasetCard.muted,
 .catalogDatasetCard.restricted,
 .workspaceDatasetCard.restricted {
-  background: rgba(240, 232, 220, 0.7);
+  background: rgba(241, 240, 245, 0.7);
 }
 
 .workspaceDatasetCard.dormant {
-  border-color: rgba(155, 60, 47, 0.18);
+  border-color: rgba(220, 38, 38, 0.15);
 }
 
 .workspaceEmpty {
@@ -519,7 +519,7 @@ code {
 .workspaceToggle.strong,
 .saveButton,
 .tableActionLink {
-  border-color: rgba(47, 75, 99, 0.28);
+  border-color: rgba(124, 58, 237, 0.2);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -527,7 +527,7 @@ code {
 .workspaceToggle.strong:hover,
 .saveButton:hover,
 .tableActionLink:hover {
-  background: rgba(47, 75, 99, 0.16);
+  background: rgba(124, 58, 237, 0.12);
 }
 
 .saveButton:disabled {
@@ -567,9 +567,9 @@ code {
   height: 10px;
 }
 
-.legendSwatch.safe { background: var(--success-soft); border: 1px solid rgba(53, 98, 78, 0.22); }
-.legendSwatch.warning { background: var(--bronze-soft); border: 1px solid rgba(135, 71, 43, 0.22); }
-.legendSwatch.critical { background: var(--danger-soft); border: 1px solid rgba(155, 60, 47, 0.22); }
+.legendSwatch.safe { background: var(--success-soft); border: 1px solid rgba(5, 150, 105, 0.18); }
+.legendSwatch.warning { background: var(--bronze-soft); border: 1px solid rgba(217, 119, 6, 0.2); }
+.legendSwatch.critical { background: var(--danger-soft); border: 1px solid rgba(220, 38, 38, 0.18); }
 .legendDot { border-radius: 999px; background: var(--accent); }
 .legendLine { width: 14px; height: 2px; background: var(--accent); }
 .legendLine.secondary {
@@ -590,8 +590,8 @@ code {
 }
 
 .chartSvg rect {
-  fill: rgba(58, 40, 26, 0.02);
-  stroke: rgba(58, 40, 26, 0.12);
+  fill: rgba(124, 58, 237, 0.03);
+  stroke: rgba(124, 58, 237, 0.08);
 }
 
 .axisText,
@@ -606,7 +606,7 @@ code {
 }
 
 .gridLine {
-  stroke: rgba(58, 40, 26, 0.08);
+  stroke: rgba(124, 58, 237, 0.06);
   stroke-width: 1;
 }
 
@@ -624,7 +624,7 @@ code {
 }
 
 .routeLine {
-  stroke: rgba(47, 75, 99, 0.28);
+  stroke: rgba(124, 58, 237, 0.2);
   stroke-width: 1.2;
 }
 
@@ -653,12 +653,12 @@ code {
 
 .barTrack {
   height: 8px;
-  background: rgba(47, 75, 99, 0.08);
+  background: rgba(124, 58, 237, 0.06);
 }
 
 .barValue {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), rgba(47, 75, 99, 0.35));
+  background: linear-gradient(90deg, var(--accent), rgba(124, 58, 237, 0.3));
 }
 
 .heatPill {
@@ -698,7 +698,7 @@ code {
 
 .dataTable th,
 .viewIndexTable th {
-  background: rgba(58, 40, 26, 0.03);
+  background: rgba(124, 58, 237, 0.04);
   color: var(--text-muted);
   font-family: var(--font-mono), monospace;
   font-size: 11px;
@@ -714,7 +714,7 @@ code {
 
 .dataTable tbody tr:hover,
 .viewIndexTable tbody tr:hover {
-  background: rgba(47, 75, 99, 0.04);
+  background: rgba(124, 58, 237, 0.04);
 }
 
 .indexPanel,
@@ -757,7 +757,7 @@ code {
 }
 
 .auditItem.critical {
-  border-color: rgba(155, 60, 47, 0.22);
+  border-color: rgba(220, 38, 38, 0.18);
 }
 
 .accessWorkspaceGrid {
@@ -822,7 +822,7 @@ code {
 }
 
 .checkboxCard.checked {
-  border-color: rgba(47, 75, 99, 0.24);
+  border-color: rgba(124, 58, 237, 0.2);
   background: var(--accent-soft);
 }
 
@@ -911,16 +911,16 @@ code {
 }
 
 .topologyFlow {
-  background: linear-gradient(180deg, rgba(255, 251, 245, 0.32), rgba(237, 228, 214, 0.2));
+  background: linear-gradient(180deg, rgba(248, 248, 251, 0.4), rgba(243, 242, 247, 0.25));
 }
 
 :focus-visible {
-  outline: 2px solid rgba(47, 75, 99, 0.35);
+  outline: 2px solid rgba(124, 58, 237, 0.3);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(47, 75, 99, 0.18);
+  background: rgba(124, 58, 237, 0.15);
 }
 
 @media (max-width: 1220px) {

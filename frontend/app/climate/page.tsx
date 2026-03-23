@@ -120,7 +120,7 @@ export default async function ClimatePage({ searchParams }: PageProps) {
                     const y = 168 - (heat / 80) * 148;
                     return (
                       <g key={String(overlay.overlay_id)}>
-                        <circle cx={x} cy={y} r={6 + air / 12} fill="rgba(135, 71, 43, 0.12)" stroke="#87472b" strokeWidth={1.4} />
+                        <circle cx={x} cy={y} r={6 + air / 12} fill="rgba(220, 38, 38, 0.1)" stroke="#dc2626" strokeWidth={1.4} />
                         <text x={x} y={y + 3} textAnchor="middle" className="svgLabel">
                           {String(overlay.ward).replace("Ward ", "W")}
                         </text>

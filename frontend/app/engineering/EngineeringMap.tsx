@@ -348,7 +348,7 @@ export default function EngineeringMap({ zones, permits }: Props) {
         {viewMode === "integrated" && criticalCount > 0 && (
           <span
             style={{
-              color: "#FF3366",
+              color: "#dc2626",
               fontFamily: "var(--font-mono)",
               fontSize: 11,
               fontWeight: 600,

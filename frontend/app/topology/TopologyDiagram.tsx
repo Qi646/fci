@@ -60,7 +60,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Engineering",
     datasets: 1,
     tier: "Internal",
-    color: "#00D4FF",
+    color: "#7c3aed",
     position: { x: 60, y: 70 },
   },
   {
@@ -68,7 +68,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Planning",
     datasets: 2,
     tier: "Personal Sensitive",
-    color: "#FFB800",
+    color: "#d97706",
     position: { x: 350, y: 70 },
   },
   {
@@ -76,7 +76,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Public Health",
     datasets: 1,
     tier: "Health Sensitive",
-    color: "#FF3366",
+    color: "#dc2626",
     position: { x: 640, y: 70 },
   },
   {
@@ -84,7 +84,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Transit",
     datasets: 1,
     tier: "Open",
-    color: "#00D4FF",
+    color: "#059669",
     position: { x: 60, y: 420 },
   },
   {
@@ -92,7 +92,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Social Services",
     datasets: 1,
     tier: "Confidential",
-    color: "#FF3366",
+    color: "#6366f1",
     position: { x: 350, y: 420 },
   },
   {
@@ -100,7 +100,7 @@ const DEPARTMENTS: DepartmentRecord[] = [
     label: "Climate",
     datasets: 1,
     tier: "Open",
-    color: "#00D4FF",
+    color: "#0891b2",
     position: { x: 640, y: 420 },
   },
 ];
@@ -111,42 +111,42 @@ const QUERY_SCENARIOS: QueryScenario[] = [
     to: "planning",
     label: "Pressure surge fused with permit demand",
     purpose: "Capital planning",
-    accent: "#00D4FF",
+    accent: "#7c3aed",
   },
   {
     from: "planning",
     to: "social_services",
     label: "Housing placement demand check",
     purpose: "Service planning",
-    accent: "#FFB800",
+    accent: "#d97706",
   },
   {
     from: "public_health",
     to: "climate",
     label: "Heat-risk vulnerability sweep",
     purpose: "Climate resilience",
-    accent: "#FF3366",
+    accent: "#dc2626",
   },
   {
     from: "transit",
     to: "planning",
     label: "Station-area growth model",
     purpose: "Public information",
-    accent: "#00D4FF",
+    accent: "#059669",
   },
   {
     from: "social_services",
     to: "public_health",
     label: "Outreach demand escalation",
     purpose: "Service delivery",
-    accent: "#FF3366",
+    accent: "#6366f1",
   },
   {
     from: "climate",
     to: "engineering",
     label: "Flood corridor mitigation queue",
     purpose: "Infrastructure operations",
-    accent: "#00D4FF",
+    accent: "#0891b2",
   },
 ];
 
@@ -193,7 +193,7 @@ function activeEdgeStyle(color: string) {
     opacity: 1,
     strokeDasharray: "12 10",
     strokeLinecap: "round" as const,
-    filter: `drop-shadow(0 0 12px ${color}) drop-shadow(0 0 28px ${color})`,
+    filter: `drop-shadow(0 0 6px ${color}66)`,
     transition: "stroke 240ms ease, stroke-width 240ms ease, opacity 240ms ease, filter 240ms ease",
   };
 }
@@ -210,11 +210,11 @@ function DepartmentNode({ data }: { data: DepartmentNodeData }) {
         borderRadius: 4,
         border: `1px solid ${active ? data.color : `${data.color}33`}`,
         background: active
-          ? `linear-gradient(180deg, ${data.color}1F 0%, rgba(14, 17, 26, 0.98) 70%)`
-          : "rgba(14, 17, 26, 0.95)",
+          ? `linear-gradient(180deg, ${data.color}12 0%, #ffffff 70%)`
+          : "#ffffff",
         boxShadow: active
-          ? `0 0 24px ${data.color}44, inset 0 0 28px ${data.color}14`
-          : `0 0 20px ${data.color}11`,
+          ? `0 0 20px ${data.color}22, 0 2px 8px rgba(0,0,0,0.06)`
+          : `0 2px 8px rgba(0,0,0,0.04)`,
         transform: active ? "translateY(-6px) scale(1.02)" : "translateY(0) scale(1)",
         transition: "transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background 220ms ease",
         animation: active ? "pulse-glow 1.8s ease-in-out infinite" : undefined,
@@ -264,7 +264,7 @@ function DepartmentNode({ data }: { data: DepartmentNodeData }) {
         ) : null}
       </div>
 
-      <div style={{ fontSize: 15, fontWeight: 700, color: "#E8ECF4", marginBottom: 8 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: "#1a1a2e", marginBottom: 8 }}>
         {data.label}
       </div>
 
@@ -285,12 +285,12 @@ function DepartmentNode({ data }: { data: DepartmentNodeData }) {
         <span
           style={{
             padding: "2px 8px",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid rgba(124,58,237,0.12)",
             borderRadius: 2,
             fontFamily: "var(--font-mono)",
             fontSize: 9,
             fontWeight: 600,
-            color: "#6B7A8D",
+            color: "#8888a0",
           }}
         >
           {data.tier}
@@ -318,7 +318,7 @@ function DepartmentNode({ data }: { data: DepartmentNodeData }) {
           >
             Link state
           </div>
-          <div style={{ fontSize: 11, color: "#A9BBCC" }}>
+          <div style={{ fontSize: 11, color: "#4a4a5e" }}>
             {data.role === "Source" ? "Streaming a cross-department request" : "Receiving a governed data join"}
           </div>
         </div>
@@ -337,9 +337,9 @@ function FederationNode({ data }: { data: FederationNodeData }) {
         minWidth: 260,
         borderRadius: 6,
         textAlign: "center" as const,
-        background: "linear-gradient(180deg, rgba(0, 212, 255, 0.11), rgba(10, 15, 22, 0.95))",
-        border: `1px solid ${data.accent}55`,
-        boxShadow: `0 0 40px ${data.accent}22, inset 0 0 30px rgba(0, 212, 255, 0.08)`,
+        background: `linear-gradient(180deg, ${data.accent}08, #ffffff)`,
+        border: `1px solid ${data.accent}33`,
+        boxShadow: `0 0 24px ${data.accent}15, 0 4px 16px rgba(0,0,0,0.06)`,
       }}
     >
       <div
@@ -369,7 +369,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
         Core
       </div>
 
-      <div style={{ fontSize: 18, fontWeight: 700, color: "#F4FBFF", marginBottom: 6 }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "#1a1a2e", marginBottom: 6 }}>
         {data.label}
       </div>
 
@@ -377,7 +377,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
         style={{
           fontFamily: "var(--font-mono)",
           fontSize: 10,
-          color: "#8BA1B6",
+          color: "#8888a0",
           marginBottom: 12,
         }}
       >
@@ -389,7 +389,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
           fontFamily: "var(--font-mono)",
           fontSize: 30,
           fontWeight: 700,
-          color: "#E8ECF4",
+          color: "#1a1a2e",
           lineHeight: 1,
         }}
       >
@@ -403,7 +403,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
           fontWeight: 700,
           letterSpacing: "0.14em",
           textTransform: "uppercase" as const,
-          color: "#6B7A8D",
+          color: "#8888a0",
           marginTop: 6,
           marginBottom: 14,
         }}
@@ -418,7 +418,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
           padding: "12px 14px",
           borderRadius: 4,
           border: `1px solid ${data.accent}33`,
-          background: "rgba(6, 10, 18, 0.6)",
+          background: "rgba(124, 58, 237, 0.04)",
         }}
       >
         <div
@@ -438,7 +438,7 @@ function FederationNode({ data }: { data: FederationNodeData }) {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 10,
-            color: "#8BA1B6",
+            color: "#8888a0",
           }}
         >
           {data.purpose}
@@ -592,7 +592,7 @@ export default function TopologyDiagram() {
         position: "relative",
         height: "100%",
         overflow: "hidden",
-        background: "linear-gradient(180deg, rgba(4, 7, 14, 0.96), rgba(4, 6, 12, 1))",
+        background: "var(--bg)",
       }}
     >
       <div
@@ -600,7 +600,7 @@ export default function TopologyDiagram() {
           position: "absolute",
           inset: 0,
           pointerEvents: "none",
-          background: `radial-gradient(circle at 50% 52%, ${activeScenario.accent}16 0%, transparent 22%), radial-gradient(circle at 18% 18%, rgba(0, 212, 255, 0.08) 0%, transparent 18%), radial-gradient(circle at 82% 18%, rgba(255, 51, 102, 0.09) 0%, transparent 16%)`,
+          background: `radial-gradient(circle at 50% 52%, ${activeScenario.accent}0a 0%, transparent 22%)`,
         }}
       />
       <div
@@ -656,7 +656,7 @@ export default function TopologyDiagram() {
           variant={BackgroundVariant.Dots}
           gap={28}
           size={1.2}
-          color="rgba(0, 212, 255, 0.08)"
+          color="rgba(124, 58, 237, 0.08)"
         />
 
         <Panel position="top-left">
@@ -666,8 +666,8 @@ export default function TopologyDiagram() {
               padding: "14px 16px",
               borderRadius: 6,
               border: `1px solid ${activeScenario.accent}33`,
-              background: "linear-gradient(180deg, rgba(8, 14, 24, 0.92), rgba(7, 10, 17, 0.82))",
-              boxShadow: "0 18px 60px rgba(0, 0, 0, 0.35)",
+              background: "rgba(255, 255, 255, 0.95)",
+              boxShadow: "0 4px 24px rgba(0, 0, 0, 0.08)",
               backdropFilter: "blur(14px)",
             }}
           >
@@ -745,8 +745,8 @@ export default function TopologyDiagram() {
                 minHeight: 24,
                 padding: "0 10px",
                 borderRadius: 999,
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(124,58,237,0.12)",
+                background: "rgba(124,58,237,0.04)",
                 color: "#C9D7E4",
                 fontSize: 12,
                 fontWeight: 600,
@@ -765,9 +765,9 @@ export default function TopologyDiagram() {
               gap: 10,
               padding: "14px",
               borderRadius: 6,
-              border: "1px solid rgba(0, 212, 255, 0.14)",
-              background: "linear-gradient(180deg, rgba(8, 12, 20, 0.9), rgba(8, 10, 17, 0.8))",
-              boxShadow: "0 18px 60px rgba(0, 0, 0, 0.35)",
+              border: "1px solid rgba(124, 58, 237, 0.12)",
+              background: "rgba(255, 255, 255, 0.95)",
+              boxShadow: "0 4px 24px rgba(0, 0, 0, 0.08)",
               backdropFilter: "blur(14px)",
             }}
           >
@@ -792,7 +792,7 @@ export default function TopologyDiagram() {
                   padding: "10px 12px",
                   borderRadius: 4,
                   border: `1px solid ${event.accent}22`,
-                  background: "rgba(255, 255, 255, 0.02)",
+                  background: "rgba(124, 58, 237, 0.03)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
@@ -812,7 +812,7 @@ export default function TopologyDiagram() {
                     style={{
                       fontFamily: "var(--font-mono)",
                       fontSize: 9,
-                      color: "#8BA1B6",
+                      color: "#8888a0",
                     }}
                   >
                     {event.purpose}
@@ -823,7 +823,7 @@ export default function TopologyDiagram() {
                   style={{
                     fontFamily: "var(--font-mono)",
                     fontSize: 10,
-                    color: "#8BA1B6",
+                    color: "#8888a0",
                   }}
                 >
                   {event.path}

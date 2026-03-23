@@ -94,7 +94,7 @@ export default function GovernedViewPanel({
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("include");
     nextIncludedIds.forEach((item) => nextParams.append("include", item));
-    router.replace(`${pathname}?${nextParams.toString()}`);
+    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
   }
 
   function accessHref() {
